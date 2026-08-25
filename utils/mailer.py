@@ -37,7 +37,7 @@ def send_mail(new_jobs: JobList, already_saved_jobs: JobList, deleted_jobs: JobL
 def format_email_body(subject: str, new_jobs: JobList, already_saved_jobs: JobList, deleted_jobs: JobList, growth: float):
     def modals(jobs: JobList):
         lines = "".join(
-            f"""
+            f'''
             <div style="background:#ffffff;border:1px solid #e5e7eb;border-radius:12px;padding:20px;width:200px;display:inline-block;vertical-align:top;margin:8px;font-family:Arial,sans-serif;">
                 <div style="width:48px;height:48px;border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:12px;">
                     <img src="{job.company_logo}">
@@ -45,13 +45,13 @@ def format_email_body(subject: str, new_jobs: JobList, already_saved_jobs: JobLi
                 <a href="{f"{JOB_MAILER_URL}:{JOB_MAILER_PORT}/redirect/{job.id}" if JOB_MAILER_URL != "" else job.source_url}">
                     <p style="margin:0;font-size:15px;font-weight:600;color:#111827;">{job.title}</p>
                 </a>
-                { f"<a href=\"{job.company_url}\">" if job.company_url != "" else "" }
+                { f'<a href="{job.company_url}">' if job.company_url != "" else "" }
                 <p style="margin:4px 0 12px;font-size:13px;color:#6b7280;">{job.company} - {job.address}</p>
-                { f"</a>" if job.company_url != "" else "" }
+                { f'</a>' if job.company_url != "" else "" }
                 <hr style="border:none;border-top:1px solid #f3f4f6;margin-bottom:12px;">
                 <p style="margin:0;font-size:13px;color:#6b7280;line-height:1.6;">{job.description[:123]}...</p>
             </div>
-            """
+            '''
             for job in jobs
         )
         return f"""<div>{lines}</div>"""

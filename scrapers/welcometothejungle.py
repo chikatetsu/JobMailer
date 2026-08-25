@@ -107,7 +107,7 @@ class WelcomeToTheJungle(BaseScraper, SessionScraper):
         summary = job_json.get("summary", "")
         missions = job_json.get("key_missions", [])
         benefits = job_json.get("benefits", [])
-        return f"{summary} {" ".join(missions)} {". ".join(benefits)}".strip()
+        return f"{summary} {' '.join(missions)} {'. '.join(benefits)}".strip()
 
     def get_company(self, orga_raw: dict) -> str:
         if not orga_raw:

@@ -12,7 +12,6 @@
 - **Clonez le projet**
 - Installez **Firefox** si ça n'est pas déjà fait, pour récupérer les informations de certains sites web
 - Installez **Python 3** si ça n'est pas déjà fait
-- Installer **gunicorn**
 
 ## 2. Créez l'environnement python
 ```bash
