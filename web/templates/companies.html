@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block title %}Entreprises{% endblock %}
+
+{% block subheader %}
+<div class="filtres-bar">
+  <h1>Entreprises ({{ companies|length }})</h1>
+</div>
+{% endblock %}
+
+{% block content %}
+<section id="liste-entreprises">
+  {% for c in companies %}
+  <article class="company-card">
+    <div class="company-logo">
+      {% if c.logo %}
+      <img src="{{ c.logo }}" alt="" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+      <span class="logo-fallback" style="display:none;">{{ (c.name or '?')[0]|upper }}</span>
+      {% else %}
+      <span class="logo-fallback">{{ (c.name or '?')[0]|upper }}</span>
+      {% endif %}
+    </div>
+
+    <div class="company-main">
+      <div class="company-title-row">
+        {% if c.url %}<a class="entreprise-link" href="{{ c.url }}" target="_blank" rel="noopener">{% endif %}
+        <span class="company-name">{{ c.name.title() }}</span>
+        {% if c.url %}</a>{% endif %}
+        {% if c.dev_hiring %}<span class="tag">Embauche : {{ c.dev_hiring.name|capitalize }}</span>{% endif %}
+      </div>
+
+      <div class="company-meta">
+        {% if c.address %}
+        <span class="company-address">
+          {% if c.lat and c.lon %}<a class="entreprise-link" href="https://www.google.fr/maps/search/{{ c.lat }},{{ c.lon }}" target="_blank" rel="noopener">{% endif %}
+          {{ c.address.title() }}
+          {% if c.lat and c.lon %}</a>{% endif %}
+        </span>
+        {% endif %}
+      </div>
+
+      <div class="company-tags">
+        {% if c.tranch_employees %}<span class="tag">Entre {{ c.get_nb_employees()[0] }} et {{ c.get_nb_employees()[1] }} salariés</span>{% endif %}
+        {% if c.main_activity %}<span class="tag">{{ c.get_main_activity() }}</span>{% endif %}
+        {% if c.company_type %}<span class="tag">{{ c.get_company_type_name() }}</span>{% endif %}
+        {% if c.is_siege %}<span class="tag">Siège</span>{% endif %}
+      </div>
+    </div>
+  </article>
+  {% endfor %}
+</section>
+{% endblock %}

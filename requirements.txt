@@ -1,0 +1,14 @@
+pydantic
+folium
+python-dateutil
+selenium
+tls-client
+markdownify
+requests
+regex
+beautifulsoup4
+flask
+pyproj
+geopy
+urllib3
+gunicorn

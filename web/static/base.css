@@ -1,0 +1,92 @@
+/* ---------- Main navigation ---------- */
+
+.main-nav {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  gap: 4px;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  padding: 10px 24px;
+  overflow-x: auto;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
+  color: var(--text-dim);
+  font-size: 13px;
+  padding: 8px 14px;
+  border-radius: 20px;
+  white-space: nowrap;
+  transition: all .15s;
+}
+
+.nav-link:hover { color: var(--text); background: var(--card); }
+
+.nav-link.active {
+  background: var(--accent);
+  color: white;
+}
+
+.nav-icon { font-size: 15px; line-height: 1; }
+
+.page-main {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 20px 24px 60px;
+}
+body:has(.map-frame) .page-main {
+  max-width: none;
+  padding: 0;
+}
+
+/* ---------- Mobile: bottom tab bar ---------- */
+
+@media (max-width: 640px) {
+  .main-nav {
+    position: fixed;
+    top: auto;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    justify-content: space-around;
+    padding: 6px 4px;
+    padding-bottom: calc(6px + env(safe-area-inset-bottom));
+    border-top: 1px solid var(--border);
+    border-bottom: none;
+    overflow-x: visible;
+  }
+
+  .nav-link {
+    flex-direction: column;
+    gap: 2px;
+    padding: 6px 8px;
+    font-size: 10px;
+    border-radius: 10px;
+    flex: 1;
+    justify-content: center;
+  }
+
+  .nav-icon { font-size: 18px; }
+
+  .page-main {
+    padding-bottom: 90px; /* leaves room for the fixed bottom nav */
+  }
+}
+
+.map-frame {
+  width: 100%;
+  height: calc(100vh - 56px); /* hauteur de la nav */
+  border: none;
+  display: block;
+}
+
+@media (max-width: 640px) {
+  .map-frame {
+    height: calc(100vh - 56px - 66px); /* nav du haut retirée, tab bar du bas prise en compte */
+  }
+}

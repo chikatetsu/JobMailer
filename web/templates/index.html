@@ -1,0 +1,137 @@
+{% extends "base.html" %}
+
+{% block title %}Mes offres d'emploi{% endblock %}
+
+{% block subheader %}
+<div class="filtres-bar">
+  <h1>Mes offres d'emploi (<span id="job_count">?</span>)</h1>
+  <div class="filtres">
+    <button class="filtre-btn active" data-filtre="toutes">Toutes</button>
+    <button class="filtre-btn" data-filtre="non-vues">Non vues</button>
+    <button class="filtre-btn" data-filtre="vues">Déjà vues</button>
+    <button class="filtre-btn" data-filtre="postulees">Postulées</button>
+  </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<section id="liste-offres">
+  {% for o in jobs %}
+  <article class="offre {% if o.is_seen %}etat-vu{% endif %}"
+           data-id="{{ o.id }}"
+           data-vu="{{ o.is_seen }}"
+           data-candidate-status="{{ o.candidate_status.name }}"
+           data-candidate-date="{{ o.candidate_date.isoformat() if o.candidate_date else '' }}">
+
+    <div class="offre-top">
+      {% if o.company_url %}<a class="entreprise-link" href="{{ o.company_url }}" target="_blank" rel="noopener">{% endif %}
+      <div class="company-logo">
+        {% if o.company_logo %}
+        <img src="{{ o.company_logo }}" alt="" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+        <span class="logo-fallback" style="display:none;">{{ (o.company or '?')[0]|upper }}</span>
+        {% else %}
+        <span class="logo-fallback">{{ (o.company or '?')[0]|upper }}</span>
+        {% endif %}
+      </div>
+      {% if o.company_url %}</a>{% endif %}
+
+      <div class="offre-main">
+        <div class="offre-titre-row">
+          <a class="offre-titre" href="/redirect/{{ o.id }}" target="_blank" rel="noopener">{{ o.title }}</a>
+          <span class="offre-score" title="Score d'intérêt">{{ "%.0f"|format(o.interest) }}</span>
+        </div>
+
+        <div class="offre-meta">
+          {% if o.company_url %}
+          <a class="entreprise entreprise-link" href="{{ o.company_url }}" target="_blank" rel="noopener">{{ o.company.title() or "—" }}</a>
+          {% else %}
+          <span class="entreprise">{{ o.company or "—" }}</span>
+          {% endif %}
+          {% if o.source_url %}<span class="source">{{ o.source_url }}</span>{% endif %}
+        </div>
+
+        <div class="offre-tags">
+          {% if o.contract_type %}<span class="tag">{{ o.contract_type.value }}</span>{% endif %}
+          {% if o.remote_type %}<span class="tag">{{ o.remote_type.value }}</span>{% endif %}
+          {% if o.experience %}<span class="tag">{{ o.experience.value }}</span>{% endif %}
+        </div>
+      </div>
+    </div>
+
+    {% if o.salary or o.address or o.posted_date %}
+    <div class="offre-facts">
+      {% if o.salary.max_amount != 0 %}
+      <div class="fact-inline">
+        <span class="fact-inline-label">Salaire</span>
+        {{ "{:,}".format(o.salary.min_amount).replace(",", " ") }}{% if o.salary.max_amount and o.salary.max_amount != o.salary.min_amount %} – {{ "{:,}".format(o.salary.max_amount).replace(",", " ") }}{% endif %} {{ o.salary.currency }}
+      </div>
+      {% else %}
+      <div class="fact-inline">
+        <span class="fact-inline-label">Salaire</span>
+        ?? ??? – ?? ??? {{ o.salary.currency }}
+      </div>
+      {% endif %}
+      {% if o.address %}
+      <div class="fact-inline">
+        <span class="fact-inline-label">Lieu</span>
+        {% if o.lat and o.lon %}<a class="entreprise-link" href="https://www.google.fr/maps/search/{{ o.lat }},{{ o.lon }}" target="_blank" rel="noopener">{% endif %}
+        {{ o.address.title() }}
+        {% if o.lat and o.lon %}</a>{% endif %}
+      </div>
+      {% endif %}
+      {% if o.posted_date %}
+      <div class="fact-inline">
+        <span class="fact-inline-label">Publiée</span>
+        {{ o.posted_date.strftime('%d/%m/%Y') }}
+      </div>
+      {% endif %}
+    </div>
+    {% endif %}
+
+    {% if o.description %}
+    <div class="offre-description-wrap">
+      <p class="offre-description">{{ o.description }}</p>
+      <button class="btn-lire-plus" type="button" data-title="{{ o.title }}" data-full="{{ o.description }}">Lire la description complète</button>
+    </div>
+    {% endif %}
+
+    <div class="offre-actions">
+      {% if o.candidate_date %}
+      {% if o.candidate_status.value == "Interview" %}
+      <span class="candidate-date">Date de l'entretien : {{ o.candidate_date.strftime('le %d/%m à %H:%M') }}</span>
+      {% else %}
+      <span class="candidate-date">Dernière action : {{ o.candidate_date.strftime('le %d/%m à %H:%M') }}</span>
+      {% endif %}
+      {% else %}
+      <span class="candidate-date" hidden></span>
+      {% endif %}
+      {% if o.is_seen %}
+      <button class="btn-mark-as-unseen">Marquer comme non-lu</button>
+      {% else %}
+      <button class="btn-mark-as-unseen" hidden>Marquer comme non-lu</button>
+      {% endif %}
+      <div class="statut-candidature" data-id="{{ o.id }}">
+        <button type="button" class="btn-statut statut-{{ o.candidate_status.name|lower }}" data-status="{{ o.candidate_status.name }}">
+          <span class="statut-label"></span>
+          <span class="statut-caret">▾</span>
+        </button>
+        <div class="statut-menu" hidden></div>
+      </div>
+    </div>
+
+  </article>
+  {% endfor %}
+</section>
+
+<div id="desc-modal" class="modal-overlay" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="desc-modal-title">
+    <button class="modal-close" aria-label="Fermer">&times;</button>
+    <h2 id="desc-modal-title"></h2>
+    <div id="desc-modal-body" class="modal-description"></div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+{% endblock %}
