@@ -27,7 +27,6 @@ class WelcomeToTheJungle(BaseScraper, SessionScraper):
             f"{parse.quote(str(self.city).lower())}-{self.city.value.postal}"
             f"?page={page}"
         )
-        self.log.error(url)
         return url
 
     def scrape(self) -> JobResponse:

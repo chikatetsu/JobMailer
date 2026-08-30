@@ -9,7 +9,7 @@ class LoggerLevel(Enum):
 
 
 def create_logger(name: str):
-    logger = logging.getLogger(f"JobSpy:{name}")
+    logger = logging.getLogger(f"JobMailer.{name}")
     logger.propagate = False
     if not logger.handlers:
         logger.setLevel(logging.INFO)
