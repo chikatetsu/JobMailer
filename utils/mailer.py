@@ -40,7 +40,7 @@ def format_email_body(subject: str, new_jobs: JobList, already_saved_jobs: JobLi
             f'''
             <div style="background:#ffffff;border:1px solid #e5e7eb;border-radius:12px;padding:20px;width:200px;display:inline-block;vertical-align:top;margin:8px;font-family:Arial,sans-serif;">
                 <div style="width:48px;height:48px;border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:12px;">
-                    <img src="{job.company_logo}">
+                    <img src="{job.company_logo}" style="width:48px;height:48px;">
                 </div>
                 <a href="{f"{JOB_MAILER_URL}:{JOB_MAILER_PORT}/redirect/{job.id}" if JOB_MAILER_URL != "" else job.source_url}">
                     <p style="margin:0;font-size:15px;font-weight:600;color:#111827;">{job.title}</p>

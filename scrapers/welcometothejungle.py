@@ -24,7 +24,7 @@ class WelcomeToTheJungle(BaseScraper, SessionScraper):
         url = (
             f"{self.base_url}/fr/pages/"
             f"emploi-{parse.quote(self.scraper_input.search_term.replace('é', 'e'))}-"
-            f"{parse.quote(str(self.city))}-{self.city.value.postal}"
+            f"{parse.quote(str(self.city).lower())}-{self.city.value.postal}"
             f"?page={page}"
         )
         self.log.error(url)
