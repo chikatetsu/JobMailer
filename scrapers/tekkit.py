@@ -1,6 +1,6 @@
 import json
 import sys
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import Any
 from urllib.parse import urlencode, quote
 
@@ -181,7 +181,16 @@ class Tekkit(BaseScraper, SessionScraper):
     def get_posted_date(self, job_card: Tag) -> datetime | None:
         date_raw = job_card.find("div", class_=["hidden", "mt-1", "text-base", "md:block", "text-gray40"])
         if not date_raw:
-            return None
+            return datetime.now()
+
+        if date_raw.startwith("Le "):
+            day, month, year = date_raw.replace("Le ", "").split("/")
+            return datetime(int(year), int(month), int(day))
+        elif date_raw.startwith("Il y a "):
+            day = int(date_raw.replace("Il y a ", "").replace(" jours", "").replace(" jour", ""))
+            return datetime.now() - timedelta(days=day)
+
+        self.log.debug(date_raw)
         # TODO
         return None
 

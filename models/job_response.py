@@ -125,8 +125,11 @@ class JobList:
                 points[(job.lat, job.lon)][0] += f"<a href=\"/redirect/{job.id}\">{job.title} - {job.company.title()}</a>"
                 points[(job.lat, job.lon)][2] += 1
 
-        first_point: tuple = next(iter(points))
-        carte = folium.Map(location=[first_point[0], first_point[1]], zoom_start=13)
+        if points != {}:
+            first_point: tuple = next(iter(points))
+            carte = folium.Map(location=[first_point[0], first_point[1]], zoom_start=13)
+        else:
+            carte = folium.Map(zoom_start=13)
         for (lat, lon), infos in points.items():
             name = infos[0]
             address = infos[1]
