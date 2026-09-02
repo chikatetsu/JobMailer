@@ -169,7 +169,7 @@ class JobRepository:
                     "title": job.title,
                     "description": job.description,
                     "company": job.company,
-                    "city": job.city,
+                    "city": str(job.city),
                     "address": job.address,
                     "lat": job.lat,
                     "lon": job.lon,

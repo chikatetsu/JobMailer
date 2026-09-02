@@ -23,7 +23,8 @@
            data-vu="{{ o.is_seen }}"
            data-is_ignored="{{ o.is_ignored }}"
            data-candidate-status="{{ o.candidate_status.name }}"
-           data-candidate-date="{{ o.candidate_date.isoformat() if o.candidate_date else '' }}">
+           data-candidate-date="{{ o.candidate_date.isoformat() if o.candidate_date else '' }}"
+           style="{% if o.is_ignored %}display: none;{% endif %}">
 
     <div class="offre-top">
       {% if o.company_url %}<a class="entreprise-link" href="{{ o.company_url }}" target="_blank" rel="noopener">{% endif %}
@@ -98,7 +99,7 @@
     </div>
     {% endif %}
 
-    <div class="bottom-part {% if o.is_ignored %}hidden{% endif %}">
+    <div class="bottom-part">
       {% if o.description %}
       <div class="offre-description-wrap">
         <p class="offre-description">{{ o.description }}</p>
