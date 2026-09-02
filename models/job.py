@@ -40,6 +40,7 @@ class Job(BaseModel):
     company_id: int | None = None
     interest: int = 0
     is_seen: bool = False
+    is_ignored: bool = False
     candidate_status: CandidateStatus = CandidateStatus.NOT_APPLIED
     candidate_date: datetime | None = None
 
@@ -98,6 +99,7 @@ class Job(BaseModel):
             "company_id": self.company_id,
             "interest": self.interest,
             "is_seen": self.is_seen,
+            "is_ignored": self.is_ignored,
             "candidate_status": self.candidate_status,
             "candidate_date": self.candidate_date,
         }

@@ -49,12 +49,13 @@ def format_email_body(subject: str, new_jobs: JobList, already_saved_jobs: JobLi
                 <p style="margin:4px 0 12px;font-size:13px;color:#6b7280;">{job.company} - {job.address}</p>
                 { f'</a>' if job.company_url != "" else "" }
                 <hr style="border:none;border-top:1px solid #f3f4f6;margin-bottom:12px;">
-                <p style="margin:0;font-size:13px;color:#6b7280;line-height:1.6;">{job.description[:123]}...</p>
+                <p style="margin:0;font-size:13px;color:#6b7280;line-height:1.6;display:-webkit-box;-webkit-line-clamp: 3;-webkit-box-orient: vertical;overflow: hidden;">{job.description}...</p>
             </div>
             '''
             for job in jobs
         )
         return f"""<div>{lines}</div>"""
+        # job.description[:123]
 
     if growth < 0:
         growth_color = "#ff0000"

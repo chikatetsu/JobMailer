@@ -79,6 +79,18 @@ async function sendCandidateStatus(id, statusName, dateStr) {
   return res.ok;
 }
 
+async function setHasIgnored(id) {
+  let url = `/api/ignore_job/${id}`;
+  const res = await fetch(url, { method: 'POST' });
+  return res.ok;
+}
+
+async function setHasUnignored(id) {
+  let url = `/api/unignore_job/${id}`;
+  const res = await fetch(url, { method: 'POST' });
+  return res.ok;
+}
+
 function applyStatusToDom(offreEl, statusName, candidateDate) {
   const btn = offreEl.querySelector('.btn-statut');
   const oldStatus = btn.dataset.status;
@@ -198,6 +210,7 @@ liste.addEventListener('click', async (e) => {
     return;
   }
 
+  // Remove the 'seen' value from the job offer
   const btnMarkAsUnseen = e.target.closest('.btn-mark-as-unseen');
   if (btnMarkAsUnseen) {
     e.preventDefault();
@@ -226,6 +239,47 @@ liste.addEventListener('click', async (e) => {
       if (menu.children.length > 0) menu.hidden = false;
     }
     return;
+  }
+
+  // Ignore the job offer
+  const btnIgnore = e.target.closest('.btn-ignore');
+  const bottomPart = offreEl.querySelector('.bottom-part');
+  if (btnIgnore) {
+    e.preventDefault();
+    offreEl.style.display = 'none';
+    job_count.innerText -= 1;
+    if (offreEl.dataset.is_ignored === 'True') {
+      btnIgnore.classList.remove('ignored-state');
+      btnIgnore.innerText = '🗑';
+      offreEl.dataset.is_ignored = 'False';
+      bottomPart.classList.remove('hidden')
+      const res = await setHasUnignored(id);
+      if (!res && offreEl.dataset.is_ignored === 'False') {
+        offreEl.style.display = '';
+        job_count.innerText += 1;
+        offreEl.classList.add('ignored-state');
+        btnIgnore.innerText = '♻️';
+        offreEl.dataset.is_ignored = 'True';
+        bottomPart.classList.add('hidden')
+      }
+    }
+    else {
+      markAsSeen(offreEl);
+      btnIgnore.classList.add('ignored-state');
+      btnIgnore.innerText = '♻️';
+      offreEl.dataset.is_ignored = 'True';
+      bottomPart.classList.add('hidden')
+      const res = await setHasIgnored(id);
+      if (!res && offreEl.dataset.is_ignored === 'True') {
+        offreEl.style.display = '';
+        job_count.innerText += 1;
+        offreEl.classList.remove('ignored-state');
+        btnIgnore.innerText = '🗑';
+        offreEl.dataset.is_ignored = 'False';
+        bottomPart.classList.remove('hidden')
+      }
+      await fetch(`/api/mark_as_seen/${id}`, {method: 'POST'});
+    }
   }
 
   // Click on a menu item: either fire immediately, or show the date picker for "Entretien".
@@ -271,12 +325,24 @@ filter_buttons.forEach(btn => {
     const filtre = btn.dataset.filtre;
     jobs.forEach(job => {
       const vu = job.dataset.vu === 'True';
-      const status = job.dataset.candidateStatus;
-      const enCours = status !== 'NOT_APPLIED' && status !== 'REJECTED';
+      const is_ignored = job.dataset.is_ignored === 'True';
       let visible = true;
-      if (filtre === 'non-vues') visible = !vu;
-      else if (filtre === 'postulees') visible = enCours;
-      else if (filtre === 'vues') visible = vu;
+      if (filtre === 'toutes') {
+        visible = !is_ignored;
+      }
+      else if (filtre === 'non-vues') {
+        visible = !vu && !is_ignored;
+      }
+      else if (filtre === 'vues') {
+        visible = vu && !is_ignored;
+      }
+      else if (filtre === 'postulees') {
+        const status = job.dataset.candidateStatus;
+        visible = status !== 'NOT_APPLIED' && status !== 'REJECTED' && !is_ignored;
+      }
+      else if (filtre === 'ignorees') {
+        visible = is_ignored;
+      }
       job.style.display = visible ? '' : 'none';
     });
     job_count.innerHTML = get_job_count();

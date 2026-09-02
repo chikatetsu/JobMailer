@@ -5,8 +5,9 @@
   --text: #e8e9ec;
   --text-dim: #8b8f9a;
   --accent: #5b8cff;
-  --vert: #3ecf8e;
+  --green: #3ecf8e;
   --orange: #f5a623;
+  --red: #e5484d;
   --border: #2a2e38;
 }
 
@@ -73,6 +74,10 @@ main {
   max-width: 780px;
   margin: 0 auto;
   padding: 20px 24px 60px;
+}
+
+.hidden {
+  display: none;
 }
 
 /* ---------- Job card ---------- */
@@ -278,6 +283,23 @@ main {
   color: var(--orange);
 }
 
+.btn-ignore {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  border-radius: 8px;
+  padding: 4px;
+  font-size: 13px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.btn-ignore:hover {
+  border-color: var(--red);
+}
+.ignored-state:hover {
+  border-color: var(--green);
+}
+
 /* ---------- Company card ---------- */
 
 .company-card {
@@ -404,11 +426,6 @@ main {
   word-break: break-word;
 }
 
-:root {
-  /* ... variables existantes ... */
-  --rouge: #e5484d;
-}
-
 .statut-candidature {
   position: relative;
 }
@@ -446,14 +463,14 @@ main {
 
 .statut-accepted {
   border-color: rgba(62, 207, 142, 0.5);
-  color: var(--vert);
+  color: var(--green);
   background: rgba(62, 207, 142, 0.08);
   cursor: default;
 }
 
 .statut-rejected {
   border-color: rgba(229, 72, 77, 0.4);
-  color: var(--rouge);
+  color: var(--red);
   background: rgba(229, 72, 77, 0.06);
   cursor: default;
 }

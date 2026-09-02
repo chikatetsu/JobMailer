@@ -43,6 +43,7 @@ class JobRepository:
                 company_id INTEGER,
                 interest INTEGER DEFAULT 0,
                 is_seen BOOLEAN DEFAULT FALSE,
+                is_ignored BOOLEAN DEFAULT FALSE,
                 candidate_status TEXT DEFAULT '{str(CandidateStatus.NOT_APPLIED)}',
                 candidate_date DATE
             )
@@ -117,6 +118,7 @@ class JobRepository:
             company_id=row["company_id"],
             interest=row["interest"],
             is_seen=row["is_seen"],
+            is_ignored=row["is_ignored"],
             candidate_status=CandidateStatus.from_str(row["candidate_status"]),
             candidate_date=row["candidate_date"],
         )
@@ -146,75 +148,32 @@ class JobRepository:
                 job_list.append(full_job)
         return JobList(job_list)
 
-    # def update_jobs(self, new_jobs: JobList, deleted_jobs: JobList):
-    #     try:
-    #         for job in deleted_jobs:
-    #             self.conn.execute("DELETE FROM jobs WHERE id = ?", (job.id,))
-    #
-    #         for job in new_jobs:
-    #             self.conn.execute("""
-    #                 INSERT INTO jobs (
-    #                     id, source, title, description, company, city, address, lat, lon, posted_date, salary_min, salary_max,
-    #                     skills, experience, remote_type, contract_type, source_url, real_url, company_url, company_logo,
-    #                     company_id, interest, is_seen, candidate_status, candidate_date
-    #                 ) VALUES (
-    #                      :id, :source, :title, :description, :company, :city, :address, :lat, :lon, :posted_date, :salary_min, :salary_max,
-    #                      :skills, :experience, :remote_type, :contract_type, :source_url, :real_url, :company_url, :company_logo,
-    #                      :company_id, :interest, :is_seen, :candidate_status, :candidate_date
-    #                 )""", {
-    #                 "id": job.id,
-    #                 "source": job.source,
-    #                 "title": job.title,
-    #                 "description": job.description,
-    #                 "company": job.company,
-    #                 "city": job.city,
-    #                 "address": job.address,
-    #                 "lat": job.lat,
-    #                 "lon": job.lon,
-    #                 "posted_date": datetime.now(),
-    #                 "salary_min": job.salary.min_amount if job.salary else 0,
-    #                 "salary_max": job.salary.max_amount if job.salary else 0,
-    #                 "skills": ", ".join(job.skills),
-    #                 "experience": str(job.experience),
-    #                 "remote_type": str(job.remote_type),
-    #                 "contract_type": str(job.contract_type),
-    #                 "source_url": job.source_url,
-    #                 "real_url": job.real_url,
-    #                 "company_url": job.company_url,
-    #                 "company_logo": job.company_logo,
-    #                 "company_id": job.company_id,
-    #                 "interest": job.interest,
-    #                 "is_seen": job.is_seen,
-    #                 "candidate_status": str(job.candidate_status),
-    #                 "candidate_date": job.candidate_date
-    #             })
-    #         self.conn.commit()
-    #     except Exception as e:
-    #         self.log.error(f"Couldn't insert new jobs : {e}")
-    def update_jobs(self, jobs: JobList):
+    def update_jobs(self, new_jobs: JobList, deleted_jobs: JobList):
         try:
-            self.conn.execute("DELETE FROM jobs")
-            for job in jobs:
+            for job in deleted_jobs:
+                self.conn.execute("DELETE FROM jobs WHERE id = ? AND candidate_status  IN ('Not applied', 'Rejected')", (job.id,))
+
+            for job in new_jobs:
                 self.conn.execute("""
                     INSERT INTO jobs (
-                        id, source, title, description, company, city, address, lat, lon, posted_date, salary_min,
-                        salary_max, skills, experience, remote_type, contract_type, source_url, real_url, company_url,
-                        company_logo, company_id, interest, is_seen, candidate_status, candidate_date
+                        id, source, title, description, company, city, address, lat, lon, posted_date, salary_min, salary_max,
+                        skills, experience, remote_type, contract_type, source_url, real_url, company_url, company_logo,
+                        company_id, interest, is_seen, is_ignored, candidate_status, candidate_date
                     ) VALUES (
-                         :id, :source, :title, :description, :company, :city, :address, :lat, :lon, :posted_date, :salary_min,
-                         :salary_max, :skills, :experience, :remote_type, :contract_type, :source_url, :real_url, :company_url,
-                         :company_logo, :company_id, :interest, :is_seen, :candidate_status, :candidate_date
+                         :id, :source, :title, :description, :company, :city, :address, :lat, :lon, :posted_date, :salary_min, :salary_max,
+                         :skills, :experience, :remote_type, :contract_type, :source_url, :real_url, :company_url, :company_logo,
+                         :company_id, :interest, :is_seen, :is_ignored, :candidate_status, :candidate_date
                     )""", {
                     "id": job.id,
                     "source": job.source,
                     "title": job.title,
                     "description": job.description,
                     "company": job.company,
-                    "city": str(job.city),
+                    "city": job.city,
                     "address": job.address,
                     "lat": job.lat,
                     "lon": job.lon,
-                    "posted_date": job.posted_date,
+                    "posted_date": datetime.now(),
                     "salary_min": job.salary.min_amount if job.salary else 0,
                     "salary_max": job.salary.max_amount if job.salary else 0,
                     "skills": ", ".join(job.skills),
@@ -228,12 +187,57 @@ class JobRepository:
                     "company_id": job.company_id,
                     "interest": job.interest,
                     "is_seen": job.is_seen,
+                    "is_ignored": job.is_ignored,
                     "candidate_status": str(job.candidate_status),
-                    "candidate_date": job.candidate_date,
+                    "candidate_date": job.candidate_date
                 })
             self.conn.commit()
         except Exception as e:
             self.log.error(f"Couldn't insert new jobs : {e}")
+    # def update_jobs(self, jobs: JobList):
+    #     try:
+    #         self.conn.execute("DELETE FROM jobs")
+    #         for job in jobs:
+    #             self.conn.execute("""
+    #                 INSERT INTO jobs (
+    #                     id, source, title, description, company, city, address, lat, lon, posted_date, salary_min,
+    #                     salary_max, skills, experience, remote_type, contract_type, source_url, real_url, company_url,
+    #                     company_logo, company_id, interest, is_seen, is_ignored, candidate_status, candidate_date
+    #                 ) VALUES (
+    #                      :id, :source, :title, :description, :company, :city, :address, :lat, :lon, :posted_date, :salary_min,
+    #                      :salary_max, :skills, :experience, :remote_type, :contract_type, :source_url, :real_url, :company_url,
+    #                      :company_logo, :company_id, :interest, :is_seen, :is_ignored, :candidate_status, :candidate_date
+    #                 )""", {
+    #                 "id": job.id,
+    #                 "source": job.source,
+    #                 "title": job.title,
+    #                 "description": job.description,
+    #                 "company": job.company,
+    #                 "city": str(job.city),
+    #                 "address": job.address,
+    #                 "lat": job.lat,
+    #                 "lon": job.lon,
+    #                 "posted_date": job.posted_date,
+    #                 "salary_min": job.salary.min_amount if job.salary else 0,
+    #                 "salary_max": job.salary.max_amount if job.salary else 0,
+    #                 "skills": ", ".join(job.skills),
+    #                 "experience": str(job.experience),
+    #                 "remote_type": str(job.remote_type),
+    #                 "contract_type": str(job.contract_type),
+    #                 "source_url": job.source_url,
+    #                 "real_url": job.real_url,
+    #                 "company_url": job.company_url,
+    #                 "company_logo": job.company_logo,
+    #                 "company_id": job.company_id,
+    #                 "interest": job.interest,
+    #                 "is_seen": job.is_seen,
+    #                 "is_ignored": job.is_ignored,
+    #                 "candidate_status": str(job.candidate_status),
+    #                 "candidate_date": job.candidate_date,
+    #             })
+    #         self.conn.commit()
+    #     except Exception as e:
+    #         self.log.error(f"Couldn't insert new jobs : {e}")
 
     def see_job(self, job_id: str) -> bool:
         try:
@@ -257,6 +261,30 @@ class JobRepository:
             return True
         except Exception as e:
             self.log.error(f"Couldn't unsee_job() : {e}")
+            return False
+
+    def ignore_job(self, job_id: str) -> bool:
+        try:
+            self.conn.execute("""UPDATE jobs SET is_ignored = :is_ignored WHERE id = :id""", {
+                "is_ignored": True,
+                "id": job_id,
+            })
+            self.conn.commit()
+            return True
+        except Exception as e:
+            self.log.error(f"Couldn't ignore_job() : {e}")
+            return False
+
+    def unignore_job(self, job_id: str) -> bool:
+        try:
+            self.conn.execute("""UPDATE jobs SET is_ignored = :is_ignored WHERE id = :id""", {
+                "is_ignored": False,
+                "id": job_id,
+            })
+            self.conn.commit()
+            return True
+        except Exception as e:
+            self.log.error(f"Couldn't unignore_job() : {e}")
             return False
 
     def update_candidate_status(self, job_id: str, candidate_status: CandidateStatus, candidate_date: datetime | None) -> bool:

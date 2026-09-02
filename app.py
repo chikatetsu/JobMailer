@@ -178,6 +178,20 @@ def update_candidate_status(job_id):
         abort(404)
     return jsonify({"ok": True})
 
+@app.route("/api/ignore_job/<job_id>", methods=["POST"])
+def ignore_job(job_id):
+    success = job_repo.ignore_job(job_id)
+    if not success:
+        abort(404)
+    return jsonify({"ok": True})
+
+@app.route("/api/unignore_job/<job_id>", methods=["POST"])
+def unignore_job(job_id):
+    success = job_repo.unignore_job(job_id)
+    if not success:
+        abort(404)
+    return jsonify({"ok": True})
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=JOB_MAILER_PORT, debug=False)

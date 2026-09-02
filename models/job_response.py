@@ -1,9 +1,9 @@
 import csv
 import io
 import re
-from typing import Iterator, Self
-
 import folium
+from pathlib import Path
+from typing import Iterator, Self
 
 from inputs.filter_input import FilterInput
 from inputs.interest_input import InterestInput
@@ -90,7 +90,7 @@ class JobList:
         company_repo.commit()
         return JobList(self.jobs)
 
-    def to_csv(self, filepath: str | None = None) -> str:
+    def to_csv(self, filepath: str | Path | None = None) -> str:
         fieldnames = self.jobs[0].to_dict().keys()
         if fieldnames == [] and filepath is not None:
             with open(filepath, "w", newline="", encoding="utf-8") as f:
@@ -110,7 +110,7 @@ class JobList:
                 f.write(content)
         return content
 
-    def create_map(self, filepath: str):
+    def create_map(self, filepath: str | Path):
         points = {}
         for job in self.jobs:
             if job.lat is None or job.lon is None:
