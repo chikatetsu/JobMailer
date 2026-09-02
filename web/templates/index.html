@@ -99,7 +99,7 @@
     </div>
     {% endif %}
 
-    <div class="bottom-part">
+    <div class="bottom-part {% if o.is_ignored %}hidden{% endif %}">
       {% if o.description %}
       <div class="offre-description-wrap">
         <p class="offre-description">{{ o.description }}</p>
