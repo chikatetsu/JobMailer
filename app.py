@@ -109,6 +109,8 @@ def companies():
     for job in jobs:
         if job.company_id is not None:
             scored_companies[job.company_id][1] += 1
+            if job.candidate_status not in {CandidateStatus.NOT_APPLIED, CandidateStatus.REJECTED}:
+                scored_companies[job.company_id][0].has_candidature = True
     sorted_companies = [company[0] for company in sorted(scored_companies.values(), key=lambda c: c[1], reverse=True)]
     return render_template("companies.html", companies=sorted_companies, active_page="companies")
 

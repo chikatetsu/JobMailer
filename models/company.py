@@ -23,6 +23,7 @@ class Company(BaseModel):
     is_siege: bool | None = None
     dev_hiring: DevHiring = DevHiring.UNKNOWN
     is_declared_hiring: bool = True
+    has_candidature: bool = False
     details: list[ScoreDetail] = []
 
 
@@ -101,6 +102,7 @@ class Company(BaseModel):
             "5307": "Société commerciale",
             "5308": "Société commerciale",
             "5309": "Société commerciale",
+            "5599": "Société anonyme à conseil d'administration",
             "1000": "Auto-entrepreneur",
             "9220": "Association",
             "7389": "Collectivité publique",
@@ -118,6 +120,8 @@ class Company(BaseModel):
             "6110": "Télécommunications filaires",
             "6120": "Télécommunications sans fil",
             "6130": "Télécommunications par satellite",
+            "7022": "Conseil pour les affaires et autres conseils de gestion",
+            "7112": "Ingénierie, études techniques",
             "7211": "R&D en biotechnologie",
             "7219": "Autre R&D en sciences physiques",
             "4741": "Commerce informatique",

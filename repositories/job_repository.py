@@ -151,7 +151,7 @@ class JobRepository:
     def update_jobs(self, new_jobs: JobList, deleted_jobs: JobList):
         try:
             for job in deleted_jobs:
-                self.conn.execute("DELETE FROM jobs WHERE id = ? AND candidate_status  IN ('Not applied', 'Rejected')", (job.id,))
+                self.conn.execute("DELETE FROM jobs WHERE id = ? AND candidate_status IN ('Not applied', 'Rejected')", (job.id,))
 
             for job in new_jobs:
                 self.conn.execute("""

@@ -37,13 +37,16 @@
           {% if c.lat and c.lon %}</a>{% endif %}
         </span>
         {% endif %}
+        {% if c.has_candidature %}
+        <span class="tag candidate-tag">Candidaté!</span>
+        {% endif %}
       </div>
 
       <div class="company-tags">
-        {% if c.tranch_employees %}<span class="tag">Entre {{ c.get_nb_employees()[0] }} et {{ c.get_nb_employees()[1] }} salariés</span>{% endif %}
+        {% if c.tranch_employees %}<span class="tag">🧑‍💼 Entre {{ c.get_nb_employees()[0] }} et {{ c.get_nb_employees()[1] }} salariés</span>{% endif %}
         {% if c.main_activity %}<span class="tag">{{ c.get_main_activity() }}</span>{% endif %}
         {% if c.company_type %}<span class="tag">{{ c.get_company_type_name() }}</span>{% endif %}
-        {% if c.is_siege %}<span class="tag">Siège</span>{% endif %}
+        {% if c.is_siege %}<span class="tag">🏢 Siège</span>{% endif %}
       </div>
     </div>
   </article>
