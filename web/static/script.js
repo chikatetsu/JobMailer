@@ -133,6 +133,36 @@ function applyStatusToDom(offreEl, statusName, candidateDate) {
   }
 }
 
+// Search bar for jobs
+let searchTimeout;
+document.getElementById('searchbar').addEventListener('input', function () {
+  clearTimeout(searchTimeout);
+
+  searchTimeout = setTimeout(() => {
+    search_job();
+  }, 200);
+});
+function search_job() {
+  const input = document.getElementById('searchbar').value.toLowerCase();
+  if (input === "") {
+    filter_buttons[0].click();
+    job_count.innerHTML = get_job_count();
+  }
+  else {
+    let count = 0;
+    jobs.forEach((job) => {
+      if (job.innerText.toLowerCase().includes(input)) {
+        job.style.display = '';
+        count += 1;
+      }
+      else {
+        job.style.display = 'none';
+      }
+    });
+    job_count.innerHTML = count;
+  }
+}
+
 function closeAllStatusMenus() {
   document.querySelectorAll('.statut-menu').forEach(m => {
     m.hidden = true;

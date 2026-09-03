@@ -70,6 +70,39 @@ header h1 {
   font-weight: 600;
 }
 
+#searchbar {
+  background: var(--card);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 6px 14px;
+  margin-top: 14px;
+  font-size: 13px;
+  font-family: inherit;
+  outline: none;
+  transition: all .15s;
+}
+
+#searchbar::placeholder {
+  color: var(--text-dim);
+}
+
+#searchbar:hover {
+  border-color: rgba(91, 140, 255, 0.4);
+}
+
+#searchbar:focus {
+  border-color: var(--accent);
+  background: var(--card-hover);
+  box-shadow: 0 0 0 2px rgba(91, 140, 255, 0.15);
+}
+
+@media (max-width: 480px) {
+  #searchbar {
+    flex: 1 1 100%;
+  }
+}
+
 main {
   max-width: 780px;
   margin: 0 auto;
