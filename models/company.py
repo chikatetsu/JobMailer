@@ -1,6 +1,7 @@
 from datetime import datetime
 from pydantic import BaseModel
 
+from models.city import City
 from utils.company_sorting import ScoreDetail, NAF_OVERRIDES, NAF_SECTIONS, DevHiring, TRANCH_STEP_DOWN, CATJUR_STEP_DOWN
 
 
@@ -9,7 +10,7 @@ class Company(BaseModel):
     siren : str = ""
     name: str
     address: str = ""
-    city: str = ""
+    city: City
     lat: float | None = None
     lon: float | None = None
     url: str = ""

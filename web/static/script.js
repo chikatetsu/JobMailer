@@ -273,9 +273,9 @@ liste.addEventListener('click', async (e) => {
 
   // Ignore the job offer
   const btnIgnore = e.target.closest('.btn-ignore');
-  const bottomPart = offreEl.querySelector('.bottom-part');
   if (btnIgnore) {
     e.preventDefault();
+    const bottomPart = offreEl.querySelector('.bottom-part');
     offreEl.style.display = 'none';
     job_count.innerText -= 1;
     if (offreEl.dataset.is_ignored === 'True') {

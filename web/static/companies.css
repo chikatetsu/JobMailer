@@ -1,0 +1,82 @@
+/* ---------- Company card ---------- */
+
+.company-card {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 14px;
+    transition: background .15s;
+}
+.company-card:hover { background: var(--card-hover); }
+
+.company-main {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.company-title-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.company-name {
+    font-weight: 600;
+    font-size: 16px;
+    color: var(--text);
+}
+
+.company-meta {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    font-size: 13px;
+    color: var(--text-dim);
+}
+
+.company-bottom-row {
+    display: flex;
+    justify-content: space-between;
+}
+
+.company-tags {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.btn-candidate {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    border-radius: 8px;
+    padding: 8px 16px;
+    margin-top: 12px;
+    font-size: 13px;
+    cursor: pointer;
+    white-space: nowrap;
+}
+.btn-candidate:hover {
+    border-color: var(--green);
+    color: var(--green);
+}
+
+.candidate-tag {
+    background: color-mix(in srgb, var(--green) 10%, transparent);
+    border: 1px solid var(--green);
+    color: var(--green);
+    border-radius: 8px;
+    padding: 8px 16px;
+    margin-top: 12px;
+    font-size: 13px;
+    white-space: nowrap;
+}

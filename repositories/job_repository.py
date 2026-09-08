@@ -4,6 +4,7 @@ from pathlib import Path
 
 from models.candidate_status import CandidateStatus
 from models.city import City
+from models.company import Company
 from models.contract_type import ContractType
 from models.experience import Experience
 from models.job import Job, JobReference
@@ -51,6 +52,47 @@ class JobRepository:
         self.conn.row_factory = sqlite3.Row
         self.log = create_logger(JobRepository.__name__)
 
+    @staticmethod
+    def _row_to_job(row: dict) -> Job:
+        job = Job(
+            id=row["id"],
+            source=row["source"],
+            title=row["title"],
+            description=row["description"],
+            company=row["company"],
+            city=City.from_str(row["city"]),
+            address=row["address"] if row["address"] else "",
+            lat=row["lat"],
+            lon=row["lon"],
+            posted_date=row["posted_date"],
+            salary=Salary(min_amount=row["salary_min"], max_amount=row["salary_max"]),
+            skills=row["skills"].split(", "),
+            experience=Experience.from_str(row["experience"]),
+            remote_type=RemoteType.from_str(row["remote_type"]),
+            contract_type=ContractType.from_str(row["contract_type"]),
+            source_url=row["source_url"],
+            real_url=row["real_url"],
+            company_url=row["company_url"],
+            company_logo=row["company_logo"],
+            company_id=row["company_id"],
+            interest=row["interest"],
+            is_seen=row["is_seen"],
+            is_ignored=row["is_ignored"],
+            candidate_status=CandidateStatus.from_str(row["candidate_status"]),
+            candidate_date=row["candidate_date"],
+        )
+        return job
+
+    def to_job_list(self, job_response: JobResponse) -> JobList:
+        job_list = []
+        for job in job_response:
+            if isinstance(job, Job):
+                job_list.append(job)
+            elif isinstance(job, JobReference):
+                full_job = self.get_job_by_id(job.id)
+                job_list.append(full_job)
+        return JobList(job_list)
+
     def get_all_jobs(self) -> JobList:
         jobs = []
         cursor = self.conn.execute("SELECT * FROM jobs")
@@ -93,37 +135,6 @@ class JobRepository:
                 saved_jobs.append(job)
         return JobList(saved_jobs)
 
-    @staticmethod
-    def _row_to_job(row: dict) -> Job:
-        job = Job(
-            id=row["id"],
-            source=row["source"],
-            title=row["title"],
-            description=row["description"],
-            company=row["company"],
-            city=City.from_str(row["city"]),
-            address=row["address"] if row["address"] else "",
-            lat=row["lat"],
-            lon=row["lon"],
-            posted_date=row["posted_date"],
-            salary=Salary(min_amount=row["salary_min"], max_amount=row["salary_max"]),
-            skills=row["skills"].split(", "),
-            experience=Experience.from_str(row["experience"]),
-            remote_type=RemoteType.from_str(row["remote_type"]),
-            contract_type=ContractType.from_str(row["contract_type"]),
-            source_url=row["source_url"],
-            real_url=row["real_url"],
-            company_url=row["company_url"],
-            company_logo=row["company_logo"],
-            company_id=row["company_id"],
-            interest=row["interest"],
-            is_seen=row["is_seen"],
-            is_ignored=row["is_ignored"],
-            candidate_status=CandidateStatus.from_str(row["candidate_status"]),
-            candidate_date=row["candidate_date"],
-        )
-        return job
-
     def get_job_by_id(self, job_id: str) -> Job | None:
         cursor = self.conn.execute("SELECT * FROM jobs WHERE id = ?", (job_id,))
         for row in cursor:
@@ -138,15 +149,71 @@ class JobRepository:
             ids.add(row["id"])
         return ids
 
-    def to_job_list(self, job_response: JobResponse) -> JobList:
-        job_list = []
-        for job in job_response:
-            if isinstance(job, Job):
-                job_list.append(job)
-            elif isinstance(job, JobReference):
-                full_job = self.get_job_by_id(job.id)
-                job_list.append(full_job)
-        return JobList(job_list)
+    def create_spontaneous_application(self, company: Company) -> Job:
+        spontaneous_application = Job(
+            id=f"spontanee_{company.name}",
+            source=company.name,
+            title="Candidature spontanée",
+            description="",
+            company=company.name,
+            city=company.city,
+            address=company.address,
+            lat=company.lat,
+            lon=company.lon,
+            posted_date=datetime.now(),
+            skills=[],
+            experience=Experience.MID_LEVEL,
+            remote_type=RemoteType.ON_SITE,
+            contract_type=ContractType.CDI,
+            source_url=company.url,
+            real_url=company.url,
+            company_id=company.id,
+            company_url=company.url,
+            company_logo=company.logo,
+            interest=20,
+            is_seen=True,
+            candidate_status=CandidateStatus.WAITING_APPLICATION_RESPONSE,
+            candidate_date=datetime.now(),
+        )
+        self.conn.execute("""
+            INSERT INTO jobs (
+                id, source, title, description, company, address, posted_date, salary_min, salary_max, skills,
+                experience, remote_type, contract_type, source_url, real_url, company_url, company_logo, company_id,
+                interest, is_seen, lat, lon, candidate_status, candidate_date, city, is_ignored
+            ) VALUES (
+                :id, :source, :title, :description, :company, :address, :posted_date, :salary_min, :salary_max, :skills,
+                :experience, :remote_type, :contract_type, :source_url, :real_url, :company_url, :company_logo, :company_id,
+                :interest, :is_seen, :lat, :lon, :candidate_status, :candidate_date, :city, :is_ignored
+            )""", {
+            "id": spontaneous_application.id,
+            "source": spontaneous_application.source,
+            "title": spontaneous_application.title,
+            "description": spontaneous_application.description,
+            "company": spontaneous_application.company,
+            "city": str(spontaneous_application.city),
+            "address": spontaneous_application.address,
+            "lat": spontaneous_application.lat,
+            "lon": spontaneous_application.lon,
+            "posted_date": spontaneous_application.posted_date,
+            "salary_min": 0,
+            "salary_max": 0,
+            "skills": "",
+            "experience": str(spontaneous_application.experience),
+            "remote_type": str(spontaneous_application.remote_type),
+            "contract_type": str(spontaneous_application.contract_type),
+            "source_url": spontaneous_application.source_url,
+            "real_url": spontaneous_application.real_url,
+            "company_url": spontaneous_application.company_url,
+            "company_logo": spontaneous_application.company_logo,
+            "company_id": spontaneous_application.company_id,
+            "interest": spontaneous_application.interest,
+            "is_seen": spontaneous_application.is_seen,
+            "is_ignored": spontaneous_application.is_ignored,
+            "candidate_status": str(spontaneous_application.candidate_status),
+            "candidate_date": spontaneous_application.candidate_date
+        })
+        self.conn.commit()
+        return spontaneous_application
 
     def update_jobs(self, new_jobs: JobList, deleted_jobs: JobList):
         try:
@@ -173,7 +240,7 @@ class JobRepository:
                     "address": job.address,
                     "lat": job.lat,
                     "lon": job.lon,
-                    "posted_date": datetime.now(),
+                    "posted_date": job.posted_date,
                     "salary_min": job.salary.min_amount if job.salary else 0,
                     "salary_max": job.salary.max_amount if job.salary else 0,
                     "skills": ", ".join(job.skills),

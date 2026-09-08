@@ -194,6 +194,16 @@ def unignore_job(job_id):
         abort(404)
     return jsonify({"ok": True})
 
+@app.route("/api/create_spontaneous_application/<company_id>", methods=["POST"])
+def create_spontaneous_application(company_id):
+    company = company_repo.get_company_by_id(company_id)
+    if company is None:
+        abort(404)
+    job = job_repo.create_spontaneous_application(company)
+    if not job:
+        abort(400)
+    return jsonify({"ok": True})
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=JOB_MAILER_PORT, debug=False)

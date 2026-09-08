@@ -89,9 +89,9 @@ Ouvrez l'éditeur de tâches cron :
 ```bash
 crontab -e
 ```
-Ajoutez une règle qui permet de lancer le scraper tous les jours à 9h00 :
+Ajoutez une règle qui permet de lancer le scraper tous les jours à 9h00 sauf le samedi et le dimanche :
 ```bash
-0 9 * * * /JobMailer/.venv/bin/python /JobMailer/main.py
+0 9 * * 1-5 /JobMailer/.venv/bin/python /JobMailer/main.py
 ```
 Ainsi, le serveur mettra à jour les nouvelles offres d'emploi disponibles sur l'application et vous les enverra par mail entre 9h00 et 9h30. Pour changer l'heure à laquelle vous voulez recevoir le mail ou à quelle fréquence, regardez la documentation de cron.
 
