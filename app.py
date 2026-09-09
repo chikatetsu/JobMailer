@@ -107,7 +107,7 @@ def companies():
     scored_companies = { company.id : [company, 0] for company in companies_list }
     jobs = job_repo.get_all_jobs()
     for job in jobs:
-        if job.company_id is not None:
+        if job.company_id is not None and not job.is_ignored:
             scored_companies[job.company_id][1] += 1
             if job.candidate_status not in {CandidateStatus.NOT_APPLIED, CandidateStatus.REJECTED}:
                 scored_companies[job.company_id][0].has_candidature = True
