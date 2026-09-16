@@ -6,6 +6,7 @@ from dateutil.relativedelta import relativedelta
 
 from models.city import City
 from models.job_response import JobList
+from scrapers.apec import Apec
 from scrapers.francetravail import FranceTravail
 from scrapers.glassdoor import Glassdoor
 from scrapers.google_search import GoogleSearch
@@ -37,7 +38,8 @@ class StatRepository:
                 indeed_source_count INTEGER DEFAULT 0,
                 zip_recruiter_source_count INTEGER DEFAULT 0,
                 google_source_count INTEGER DEFAULT 0,
-                glassdoor_source_count INTEGER DEFAULT 0
+                glassdoor_source_count INTEGER DEFAULT 0,
+                apec_source_count INTEGER DEFAULT 0
             )
         """)
         self.conn.row_factory = sqlite3.Row
@@ -54,11 +56,13 @@ class StatRepository:
             INSERT INTO statistics (
                 insert_date, city, interest, nb_jobs, hellowork_source_count, tekkit_source_count,
                 welcome_to_the_jungle_source_count, linkedin_source_count, france_travail_source_count,
-                indeed_source_count, zip_recruiter_source_count, google_source_count, glassdoor_source_count
+                indeed_source_count, zip_recruiter_source_count, google_source_count, glassdoor_source_count,
+                apec_source_count
             ) VALUES (
                 :insert_date, :city, :interest, :nb_jobs, :hellowork_source_count, :tekkit_source_count,
                 :welcome_to_the_jungle_source_count, :linkedin_source_count, :france_travail_source_count,
-                :indeed_source_count, :zip_recruiter_source_count, :google_source_count, :glassdoor_source_count
+                :indeed_source_count, :zip_recruiter_source_count, :google_source_count, :glassdoor_source_count,
+                :apec_source_count
             )
         """, {
             'insert_date': insert_date,
@@ -74,6 +78,7 @@ class StatRepository:
             'zip_recruiter_source_count': source_counts.get(ZipRecruiter.__name__, 0),
             'google_source_count': source_counts.get(GoogleSearch.__name__, 0),
             'glassdoor_source_count': source_counts.get(Glassdoor.__name__, 0),
+            'apec_source_count': source_counts.get(Apec.__name__, 0),
         })
         self.conn.commit()
 

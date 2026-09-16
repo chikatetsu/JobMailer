@@ -12,6 +12,7 @@ class Site(Enum):
     HELLOWORK = "HelloWork"
     TEKKIT = "Tekkit"
     WELCOME_TO_THE_JUNGLE = "WelcomeToTheJungle"
+    APEC = "APEC"
 
     def __str__(self):
         return self.value

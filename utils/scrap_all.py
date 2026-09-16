@@ -6,6 +6,7 @@ from inputs.scraper_config import ScraperConfig
 from inputs.scraper_input import ScraperInput
 from models.job_response import JobResponse
 from models.site import Site
+from scrapers.apec import Apec
 from scrapers.bayt import BaytScraper
 from scrapers.francetravail import FranceTravail
 from scrapers.glassdoor import Glassdoor
@@ -30,7 +31,8 @@ MAP_SCRAPER_SITE: dict[Site, type[BaseScraper]] = {
     Site.FRANCE_TRAVAIL: FranceTravail,
     Site.HELLOWORK: HelloWork,
     Site.TEKKIT: Tekkit,
-    Site.WELCOME_TO_THE_JUNGLE: WelcomeToTheJungle
+    Site.WELCOME_TO_THE_JUNGLE: WelcomeToTheJungle,
+    Site.APEC: Apec,
 }
 
 def scrape_jobs(scraper_input: ScraperInput, scraper_config: ScraperConfig, seen_jobs: set[str] | None = None) -> JobResponse:
