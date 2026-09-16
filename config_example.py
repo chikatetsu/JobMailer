@@ -33,6 +33,7 @@
 #         Site.WELCOME_TO_THE_JUNGLE,
 #         Site.LINKEDIN,
 #         Site.FRANCE_TRAVAIL,
+#         Site.APEC,
 #         Site.INDEED,
 #         Site.ZIP_RECRUITER,
 #         Site.GOOGLE,
