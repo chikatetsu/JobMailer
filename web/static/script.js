@@ -2,15 +2,16 @@ const liste = document.getElementById('liste-offres');
 const job_count = document.getElementById('job_count');
 const filter_buttons = document.querySelectorAll('.filtre-btn[data-filtre]');
 const jobs = document.querySelectorAll('#liste-offres .offre');
+const searchbar = document.getElementById('searchbar');
 
-let get_job_count = () => {
+let getJobCount = () => {
   let cpt = 0;
   jobs.forEach(job => {
     if (job.style.display !== 'none') cpt += 1;
   });
   return cpt;
 };
-job_count.innerHTML = get_job_count();
+job_count.innerHTML = getJobCount();
 
 function markAsSeen(offreEl) {
   if (offreEl.dataset.vu === 'False') {
@@ -135,7 +136,7 @@ function applyStatusToDom(offreEl, statusName, candidateDate) {
 
 // Search bar for jobs
 let searchTimeout;
-document.getElementById('searchbar').addEventListener('input', function () {
+searchbar.addEventListener('input', function () {
   clearTimeout(searchTimeout);
 
   searchTimeout = setTimeout(() => {
@@ -143,10 +144,10 @@ document.getElementById('searchbar').addEventListener('input', function () {
   }, 200);
 });
 function search_job() {
-  const input = document.getElementById('searchbar').value.toLowerCase();
+  const input = searchbar.value.toLowerCase();
   if (input === "") {
     filter_buttons[0].click();
-    job_count.innerHTML = get_job_count();
+    job_count.innerHTML = getJobCount();
   }
   else {
     let count = 0;
@@ -375,7 +376,7 @@ filter_buttons.forEach(btn => {
       }
       job.style.display = visible ? '' : 'none';
     });
-    job_count.innerHTML = get_job_count();
+    job_count.innerHTML = getJobCount();
 
     const articles = Array.from(jobs);
     articles.sort((a, b) => {
