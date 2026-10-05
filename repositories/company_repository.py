@@ -147,10 +147,38 @@ class CompanyRepository:
                 "dev_hiring": company.dev_hiring.value if company.dev_hiring.value != 0 else saved_company.dev_hiring.value,
                 "company_id": company_id
             })
+            return True
         except Exception as e:
             self.log.error(f"Failed to update company: {e}")
             return False
-        return True
+
+    def set_name(self, company_id: int, company_name: str) -> bool:
+        try:
+            self.conn.execute("UPDATE companies SET name = ? WHERE id = ?", (company_name, company_id))
+            self.conn.commit()
+            return True
+        except Exception as e:
+            self.log.error(f"Failed to set company name: {e}")
+            return False
+
+    def set_dev_hiring(self, company_id: int, company_dev_hiring: int) -> bool:
+        try:
+            self.conn.execute("UPDATE companies SET dev_hiring = ? WHERE id = ?", (company_dev_hiring, company_id))
+            self.conn.commit()
+            return True
+        except Exception as e:
+            self.log.error(f"Failed to set company dev_hiring: {e}")
+            return False
+
+    def set_website(self, company_id: int, company_url: str) -> bool:
+        try:
+            logo = f"https://www.google.com/s2/favicons?domain={company_url}&sz=128"
+            self.conn.execute("UPDATE companies SET url = ?, logo = ? WHERE id = ?", (company_url, logo, company_id))
+            self.conn.commit()
+            return True
+        except Exception as e:
+            self.log.error(f"Failed to set company website: {e}")
+            return False
 
     def insert_company(self, company: Company) -> bool:
         try:

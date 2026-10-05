@@ -86,7 +86,8 @@ class JobList:
 
     def get_company_infos_into_jobs(self, company_repo: CompanyRepository) -> "JobList":
         for job in self.jobs:
-            job.get_company_infos(company_repo,False)
+            if job.company_id is None:
+                job.get_company_infos(company_repo,False)
         company_repo.commit()
         return JobList(self.jobs)
 

@@ -22,6 +22,13 @@ class DevHiring(IntEnum):
             return DevHiring.UNKNOWN
         return DevHiring(max(DevHiring.NO, self.value - 1))
 
+    @classmethod
+    def from_int(cls, dev_hiring: int) -> "DevHiring | None":
+        for value in DevHiring:
+            if dev_hiring == value:
+                return value
+        return None
+
 # Surcharges pour des codes NAF très précis (4 chiffres sans point ni lettre)
 NAF_OVERRIDES: dict[str, DevHiring] = {
     "6201": DevHiring.YES,      # Dév. logiciel (attention : concurrent si cherche emploi)

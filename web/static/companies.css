@@ -80,3 +80,94 @@
     font-size: 13px;
     white-space: nowrap;
 }
+
+.btn-modifier {
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 4px 6px;
+    margin-left: 12px;
+    font-size: 13px;
+    cursor: pointer;
+    white-space: nowrap;
+}
+.btn-modifier:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
+#edit-modal-cancel {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    border-radius: 8px;
+    width: 112px;
+    padding: 8px 16px;
+    font-size: 13px;
+    cursor: pointer;
+    white-space: nowrap;
+}
+#edit-modal-cancel:hover {
+    border-color: var(--red);
+    color: var(--red);
+}
+
+#edit-modal-save {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    border-radius: 8px;
+    width: 112px;
+    padding: 8px 16px;
+    font-size: 13px;
+    cursor: pointer;
+    white-space: nowrap;
+}
+#edit-modal-save:hover {
+    border-color: var(--green);
+    color: var(--green);
+}
+
+input {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    border-radius: 8px;
+    width: 80%;
+    padding: 4px 8px;
+    cursor: text;
+    white-space: nowrap;
+}
+input:focus {
+    border-color: var(--text);
+    color: var(--text);
+}
+
+select {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    border-radius: 8px;
+    width: 60%;
+    padding: 4px 8px;
+    cursor: pointer;
+    white-space: nowrap;
+}
+select:focus {
+    border-color: var(--text);
+    color: var(--text);
+}
+
+#searchbar {
+    width: 33%;
+}
+
+.modal-element {
+    margin-bottom: 8px;
+}
+
+.modal-buttons {
+    margin-top: 16px;
+    display: flex;
+    justify-content: space-evenly;
+}

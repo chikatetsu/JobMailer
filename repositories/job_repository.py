@@ -215,6 +215,69 @@ class JobRepository:
         self.conn.commit()
         return spontaneous_application
 
+    def update_job(self, job_id: str, job: Job) -> bool:
+        try:
+            self.conn.execute("""
+                UPDATE jobs
+                SET source = :source,
+                    title = :title,
+                    description = :description,
+                    company = :company,
+                    address = :address,
+                    posted_date = :posted_date,
+                    salary_min = :salary_min,
+                    salary_max = :salary_max,
+                    skills = :skills,
+                    experience = :experience,
+                    remote_type = :remote_type,
+                    contract_type = :contract_type,
+                    source_url = :source_url,
+                    real_url = :real_url,
+                    company_url = :company_url,
+                    company_logo = :company_logo,
+                    company_id = :company_id,
+                    interest = :interest,
+                    is_seen = :is_seen,
+                    lat = :lat,
+                    lon = :lon,
+                    candidate_status = :candidate_status,
+                    candidate_date = :candidate_date,
+                    city = :city,
+                    is_ignored = :is_ignored
+                WHERE id = :job_id
+            """, {
+                "job_id": job_id,
+                "source": job.source,
+                "title": job.title,
+                "description": job.description,
+                "company": job.company,
+                "city": str(job.city),
+                "address": job.address,
+                "lat": job.lat,
+                "lon": job.lon,
+                "posted_date": job.posted_date,
+                "salary_min": job.salary.min_amount if job.salary else 0,
+                "salary_max": job.salary.max_amount if job.salary else 0,
+                "skills": ", ".join(job.skills),
+                "experience": str(job.experience),
+                "remote_type": str(job.remote_type),
+                "contract_type": str(job.contract_type),
+                "source_url": job.source_url,
+                "real_url": job.real_url,
+                "company_url": job.company_url,
+                "company_logo": job.company_logo,
+                "company_id": job.company_id,
+                "interest": job.interest,
+                "is_seen": job.is_seen,
+                "is_ignored": job.is_ignored,
+                "candidate_status": str(job.candidate_status),
+                "candidate_date": job.candidate_date
+            })
+            return True
+        except Exception as e:
+            self.log.error(e)
+            return False
+
     def update_jobs(self, new_jobs: JobList, deleted_jobs: JobList):
         try:
             for job in deleted_jobs:
@@ -376,3 +439,6 @@ class JobRepository:
         except Exception as e:
             self.log.error(f"Couldn't update_candidate_status() : {e}")
             return False
+
+    def commit(self):
+        self.conn.commit()

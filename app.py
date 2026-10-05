@@ -10,6 +10,7 @@ from models.contract_type import ContractType
 from models.experience import Experience
 from models.site import Site
 from models.remote_type import RemoteType
+from utils.company_sorting import DevHiring
 from utils.logger import LoggerLevel
 from repositories import JobRepository, CompanyRepository
 
@@ -139,39 +140,47 @@ def job_map():
 
 @app.route("/redirect/<job_id>")
 def see_job(job_id):
-    success = job_repo.see_job(job_id)
-    if not success:
-        abort(404)
-
     job = job_repo.get_job_by_id(job_id)
     if job is None:
         abort(404)
+    success = job_repo.see_job(job_id)
+    if not success:
+        abort(400)
     if job.real_url != "":
         return redirect(job.real_url, code=302)
     return redirect(job.source_url, code=302)
 
 @app.route("/api/mark_as_seen/<job_id>", methods=["POST"])
 def mark_as_seen(job_id):
+    job = job_repo.get_job_by_id(job_id)
+    if not job:
+        abort(404)
     success = job_repo.see_job(job_id)
     if not success:
-        abort(404)
+        abort(400)
     return jsonify({"ok": True})
 
 @app.route("/api/mark_as_unseen/<job_id>", methods=["POST"])
 def mark_as_unseen(job_id):
+    job = job_repo.get_job_by_id(job_id)
+    if not job:
+        abort(404)
     success = job_repo.unsee_job(job_id)
     if not success:
-        abort(404)
+        abort(400)
     return jsonify({"ok": True})
 
 @app.route("/api/update_candidate_status/<job_id>", methods=["POST"])
 def update_candidate_status(job_id):
+    job = job_repo.get_job_by_id(job_id)
+    if not job:
+        abort(404)
     candidate_status_raw = request.args.get('candidate_status', None)
     if candidate_status_raw is None:
         abort(400)
     candidate_status = CandidateStatus.from_str(candidate_status_raw)
     if candidate_status is None:
-        abort(400)
+        abort(404)
     candidate_date = request.args.get('candidate_date', None)
     if candidate_date is not None:
         candidate_date = datetime.strptime(candidate_date, "%Y-%m-%d %H:%M:%S")
@@ -182,16 +191,22 @@ def update_candidate_status(job_id):
 
 @app.route("/api/ignore_job/<job_id>", methods=["POST"])
 def ignore_job(job_id):
+    job = job_repo.get_job_by_id(job_id)
+    if job is None:
+        abort(404)
     success = job_repo.ignore_job(job_id)
     if not success:
-        abort(404)
+        abort(400)
     return jsonify({"ok": True})
 
 @app.route("/api/unignore_job/<job_id>", methods=["POST"])
 def unignore_job(job_id):
+    job = job_repo.get_job_by_id(job_id)
+    if job is None:
+        abort(404)
     success = job_repo.unignore_job(job_id)
     if not success:
-        abort(404)
+        abort(400)
     return jsonify({"ok": True})
 
 @app.route("/api/create_spontaneous_application/<company_id>", methods=["POST"])
@@ -204,6 +219,50 @@ def create_spontaneous_application(company_id):
         abort(400)
     return jsonify({"ok": True})
 
+@app.route("/api/edit_company/<company_id>", methods=["PUT"])
+def edit_company(company_id):
+    company = company_repo.get_company_by_id(company_id)
+    if company is None:
+        abort(404)
+    params = request.get_json()
+    company_name = params.get("name", None)
+    company_hiring = params.get("hiring", None)
+    company_website = params.get("website", None)
+
+    if company_website is not None and company.url != company_website:
+        success = company_repo.set_website(company_id, company_website)
+        if not success:
+            abort(400)
+        company = company_repo.get_company_by_id(company_id)
+        if company is None:
+            abort(404)
+
+    if company_name is not None and company.name != company_name.upper():
+        success = company_repo.set_name(company_id, company_name.upper())
+        if not success:
+            abort(400)
+        jobs = job_repo.get_all_jobs()
+        for job in jobs:
+            if job.company_id is None and job.company.upper() == company_name.upper():
+                job.company_id = company.id
+                job.company_url = company.url
+                job.company_logo = company.logo
+                job.address = company.address
+                job.lon = company.lon
+                job.lat = company.lat
+                job_repo.update_job(job.id, job)
+
+    if company_hiring is not None and company.dev_hiring != int(company_hiring):
+        dev_hiring = DevHiring.from_int(int(company_hiring))
+        if dev_hiring is None:
+            abort(404)
+        success = company_repo.set_dev_hiring(company_id, dev_hiring)
+        if not success:
+            abort(400)
+
+    # new_company = company_repo.get_company_by_id(company_id)
+    # return jsonify(new_company)
+    return jsonify({"ok": True})
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=JOB_MAILER_PORT, debug=False)

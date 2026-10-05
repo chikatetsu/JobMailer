@@ -272,7 +272,7 @@
   padding: 26px;
 }
 
-.modal-close {
+#modal-close {
   position: absolute;
   top: 12px;
   right: 12px;
@@ -284,7 +284,7 @@
   cursor: pointer;
   padding: 6px;
 }
-.modal-close:hover { color: var(--text); }
+#modal-close:hover { color: var(--text); }
 
 .modal h2 {
   margin: 0 0 16px;

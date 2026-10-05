@@ -21,6 +21,8 @@
   {% for o in jobs %}
   <article class="offre {% if o.is_seen %}etat-vu{% endif %}"
            data-id="{{ o.id }}"
+           data-title="{{ o.title }}"
+           data-full="{{ o.description }}"
            data-vu="{{ o.is_seen }}"
            data-is_ignored="{{ o.is_ignored }}"
            data-candidate-status="{{ o.candidate_status.name }}"
@@ -104,7 +106,7 @@
       {% if o.description %}
       <div class="offre-description-wrap">
         <p class="offre-description">{{ o.description }}</p>
-        <button class="btn-lire-plus" type="button" data-title="{{ o.title }}" data-full="{{ o.description }}">Lire la description complète</button>
+        <button class="btn-lire-plus" type="button">Lire la description complète</button>
       </div>
       {% endif %}
 
@@ -139,7 +141,7 @@
 
 <div id="desc-modal" class="modal-overlay" hidden>
   <div class="modal" role="dialog" aria-modal="true" aria-labelledby="desc-modal-title">
-    <button class="modal-close" aria-label="Fermer">&times;</button>
+    <button id="modal-close" aria-label="Fermer">&times;</button>
     <h2 id="desc-modal-title"></h2>
     <div id="desc-modal-body" class="modal-description"></div>
   </div>

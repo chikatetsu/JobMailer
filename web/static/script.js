@@ -229,15 +229,17 @@ liste.addEventListener('click', async (e) => {
   if (!offreEl) return;
   const id = offreEl.dataset.id;
 
+  // Click on link
   const lienTitre = e.target.closest('.offre-titre');
   if (lienTitre) {
     markAsSeen(offreEl);
     return;
   }
 
+  // Description modal
   const btnLirePlus = e.target.closest('.btn-lire-plus');
   if (btnLirePlus) {
-    openDescModal(btnLirePlus.dataset.title, btnLirePlus.dataset.full);
+    openDescModal(offreEl.dataset.title, offreEl.dataset.full);
     return;
   }
 
@@ -256,6 +258,7 @@ liste.addEventListener('click', async (e) => {
         btnMarkAsUnseen.hidden = false;
       }
     }
+    return;
   }
 
   // Toggle the status dropdown open/closed.
@@ -311,6 +314,7 @@ liste.addEventListener('click', async (e) => {
       }
       await fetch(`/api/mark_as_seen/${id}`, {method: 'POST'});
     }
+    return;
   }
 
   // Click on a menu item: either fire immediately, or show the date picker for "Entretien".
@@ -396,23 +400,24 @@ filter_buttons.forEach(btn => {
 const descModal = document.getElementById('desc-modal');
 const descModalTitle = document.getElementById('desc-modal-title');
 const descModalBody = document.getElementById('desc-modal-body');
+const descModalClose = document.getElementById('modal-close');
 
 function openDescModal(title, text) {
-  descModalTitle.textContent = title;
-  descModalBody.textContent = text;
-  descModal.hidden = false;
-  document.body.style.overflow = 'hidden';
+    descModalTitle.textContent = title;
+    descModalBody.textContent = text;
+    descModal.hidden = false;
+    document.body.style.overflow = 'hidden';
 }
 
 function closeDescModal() {
-  descModal.hidden = true;
-  document.body.style.overflow = '';
+    descModal.hidden = true;
+    document.body.style.overflow = '';
 }
 
-descModal.querySelector('.modal-close').addEventListener('click', closeDescModal);
+descModalClose.addEventListener('click', closeDescModal);
 descModal.addEventListener('click', (e) => {
-  if (e.target === descModal) closeDescModal();
+    if (e.target === descModal) closeDescModal();
 });
 document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape' && !descModal.hidden) closeDescModal();
+    if (e.key === 'Escape' && !descModal.hidden) closeDescModal();
 });

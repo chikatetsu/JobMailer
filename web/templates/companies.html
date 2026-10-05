@@ -9,14 +9,18 @@
 {% block subheader %}
 <div class="filtres-bar">
   <h1>Entreprises (<span id="companyCount">...</span>)</h1>
-  <input type="text" id="searchbar" size="45" placeholder="Rechercher...">
+  <input type="text" id="searchbar" placeholder="Rechercher...">
 </div>
 {% endblock %}
 
 {% block content %}
 <section id="liste-entreprises">
   {% for c in companies %}
-  <article class="company-card" data-id="{{ c.id }}">
+  <article class="company-card"
+           data-id="{{ c.id }}"
+           data-name="{{ c.name.title() }}"
+           data-hiring="{{ c.dev_hiring.value }}"
+           data-website="{{ c.url }}">
     <div class="company-logo">
       {% if c.logo %}
       <img src="{{ c.logo }}" alt="" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
@@ -31,7 +35,10 @@
         {% if c.url %}<a class="entreprise-link" href="{{ c.url }}" target="_blank" rel="noopener">{% endif %}
         <span class="company-name">{{ c.name.title() }}</span>
         {% if c.url %}</a>{% endif %}
-        {% if c.dev_hiring %}<span class="tag">Embauche : {{ c.dev_hiring.name|capitalize }}</span>{% endif %}
+        <div>
+          {% if c.dev_hiring %}<span class="tag">Embauche : {{ c.dev_hiring.name|capitalize }}</span>{% endif %}
+          <button class="btn-modifier">🖊️</button>
+        </div>
       </div>
 
       <div class="company-bottom-row">
@@ -65,6 +72,33 @@
   </article>
   {% endfor %}
 </section>
+
+<div id="edit-modal" class="modal-overlay" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="edit-modal-title">
+    <h2 id="edit-modal-title">Modifier l'entreprise</h2>
+    <span id="edit-modal-id" hidden></span>
+    <form>
+      <div class="modal-element">
+        <input type="text" name="edit-modal-name" id="edit-modal-name">
+      </div>
+      <div class="modal-element">
+        <select name="edit-modal-hiring" id="edit-modal-hiring">
+        <option value="4">Yes</option>
+        <option value="3">Probably</option>
+        <option value="2">Doubt</option>
+        <option value="1">No</option>
+      </select>
+      </div>
+      <div class="modal-element">
+        <input type="text" name="edit-modal-website" id="edit-modal-website">
+      </div>
+      <div class="modal-buttons">
+        <button id="edit-modal-cancel">Annuler</button>
+        <button id="edit-modal-save">Sauvegarder</button>
+      </div>
+    </form>
+  </div>
+</div>
 {% endblock %}
 
 {% block scripts %}
