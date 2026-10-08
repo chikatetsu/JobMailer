@@ -55,7 +55,7 @@
               {% else %}
               <span class="entreprise">{{ o.company or "—" }}</span>
               {% endif %}
-              {% if o.source_url %}<span class="source">{{ o.source_url }}</span>{% endif %}
+              {% if o.source_url %}<a class="source" href="/redirect/{{ o.id }}" target="_blank" rel="noopener">{{ o.source_url }}</a>{% endif %}
             </div>
 
             <div class="offre-tags">
@@ -72,27 +72,28 @@
       </div>
     </div>
 
-    {% if o.salary or o.address or o.posted_date %}
     <div class="offre-facts">
-      {% if o.salary.max_amount != 0 %}
-      <div class="fact-inline">
-        <span class="fact-inline-label">Salaire</span>
-        {{ "{:,}".format(o.salary.min_amount).replace(",", " ") }}{% if o.salary.max_amount and o.salary.max_amount != o.salary.min_amount %} – {{ "{:,}".format(o.salary.max_amount).replace(",", " ") }}{% endif %} {{ o.salary.currency }}
+      <div class="offre-salary-place">
+        {% if o.salary.max_amount != 0 %}
+        <div class="fact-inline">
+          <span class="fact-inline-label">Salaire</span>
+          {{ "{:,}".format(o.salary.min_amount).replace(",", " ") }}{% if o.salary.max_amount and o.salary.max_amount != o.salary.min_amount %} – {{ "{:,}".format(o.salary.max_amount).replace(",", " ") }}{% endif %} {{ o.salary.currency }}
+        </div>
+        {% else %}
+        <div class="fact-inline">
+          <span class="fact-inline-label">Salaire</span>
+          ?? ??? – ?? ??? {{ o.salary.currency }}
+        </div>
+        {% endif %}
+        {% if o.address %}
+        <div class="fact-inline">
+          <span class="fact-inline-label">Lieu</span>
+          {% if o.lat and o.lon %}<a class="entreprise-link" href="https://www.google.fr/maps/search/{{ o.lat }},{{ o.lon }}" target="_blank" rel="noopener">{% endif %}
+          {{ o.address.title() }}
+          {% if o.lat and o.lon %}</a>{% endif %}
+        </div>
+        {% endif %}
       </div>
-      {% else %}
-      <div class="fact-inline">
-        <span class="fact-inline-label">Salaire</span>
-        ?? ??? – ?? ??? {{ o.salary.currency }}
-      </div>
-      {% endif %}
-      {% if o.address %}
-      <div class="fact-inline">
-        <span class="fact-inline-label">Lieu</span>
-        {% if o.lat and o.lon %}<a class="entreprise-link" href="https://www.google.fr/maps/search/{{ o.lat }},{{ o.lon }}" target="_blank" rel="noopener">{% endif %}
-        {{ o.address.title() }}
-        {% if o.lat and o.lon %}</a>{% endif %}
-      </div>
-      {% endif %}
       {% if o.posted_date %}
       <div class="fact-inline">
         <span class="fact-inline-label">Publiée</span>
@@ -100,7 +101,6 @@
       </div>
       {% endif %}
     </div>
-    {% endif %}
 
     <div class="bottom-part {% if o.is_ignored %}hidden{% endif %}">
       {% if o.description %}

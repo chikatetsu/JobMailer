@@ -38,20 +38,35 @@ def format_email_body(subject: str, new_jobs: JobList, already_saved_jobs: JobLi
     def modals(jobs: JobList):
         lines = "".join(
             f'''
-            <div style="background:#ffffff;border:1px solid #e5e7eb;border-radius:12px;padding:20px;width:200px;display:inline-block;vertical-align:top;margin:8px;font-family:Arial,sans-serif;">
-                <div style="width:48px;height:48px;border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:12px;">
-                    <img src="{job.company_logo}" style="width:48px;height:48px;">
+            <div style="background:#ffffff;border:1px solid #e5e7eb;border-radius:12px;padding:20px;width:300px;display:inline-block;vertical-align:top;margin:8px;font-family:Arial,sans-serif;">
+                <div style="display: flex; gap: 12px;">
+                    <div style="width:48px;height:48px;border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:12px;">
+                        <img src="{job.company_logo}" style="width:48px;height:48px;">
+                    </div>
+                    <div>
+                        <a href="{f"{JOB_MAILER_URL}:{JOB_MAILER_PORT}/redirect/{job.id}" if JOB_MAILER_URL != "" else job.source_url}">
+                            <p style="margin:0;font-size:15px;font-weight:600;color:#111827;">{job.title}</p>
+                        </a>
+                        { f'<a href="{job.company_url}">' if job.company_url != "" else "" }
+                        <p style="margin:4px 0 12px;font-size:13px;color:#6b7280;">{job.company}</p>
+                        { f'</a>' if job.company_url != "" else "" }
+                    </div>
                 </div>
-                <a href="{f"{JOB_MAILER_URL}:{JOB_MAILER_PORT}/redirect/{job.id}" if JOB_MAILER_URL != "" else job.source_url}">
-                    <p style="margin:0;font-size:15px;font-weight:600;color:#111827;">{job.title}</p>
-                </a>
-                { f'<a href="{job.company_url}">' if job.company_url != "" else "" }
-                <p style="margin:4px 0 12px;font-size:13px;color:#6b7280;">{job.company} - {job.address}</p>
-                { f'</a>' if job.company_url != "" else "" }
-                <hr style="border:none;border-top:1px solid #f3f4f6;margin-bottom:12px;">
-                <p style="margin:0;font-size:13px;color:#6b7280;line-height:1.6;display:-webkit-box;-webkit-line-clamp: 3;-webkit-box-orient: vertical;overflow: hidden;">{job.description}...</p>
+                <div style="padding-left:6px;padding-top:6px;margin-bottom:12px;font-size:13px;color:#6b7280;border-top:1px solid;">
+                    <p stype="margin:0;">
+                    { f'<a href="https://www.google.fr/maps/search/{{ o.lat }},{{ o.lon }}" target="_blank" rel="noopener">{job.address.title()}</a>'
+                        if job.lat and job.lon else job.address.title()
+                    }
+                    </p>
+                </div>
+                <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px;">
+                  { f'<span style="background:rgba(139,143,154,0.12);color:#8b8f9a;font-size:11px;font-weight:600;padding:3px 9px;border-radius:10px;">{job.contract_type.value}</span>' if job.contract_type else "" }
+                  { f'<span style="background:rgba(139,143,154,0.12);color:#8b8f9a;font-size:11px;font-weight:600;padding:3px 9px;border-radius:10px;">{job.remote_type.value}</span>' if job.remote_type else "" }
+                  { f'<span style="background:rgba(139,143,154,0.12);color:#8b8f9a;font-size:11px;font-weight:600;padding:3px 9px;border-radius:10px;">{job.experience.value}</span>' if job.experience else "" }
+                </div>
             </div>
             '''
+            # <p style="margin:0;font-size:13px;color:#6b7280;line-height:1.6;display:-webkit-box;-webkit-line-clamp: 3;-webkit-box-orient: vertical;overflow: hidden;">{job.description}...</p>
             for job in jobs
         )
         return f"""<div>{lines}</div>"""

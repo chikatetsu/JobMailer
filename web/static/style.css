@@ -133,11 +133,16 @@
 
 .offre-facts {
   display: flex;
-  gap: 20px;
+  justify-content: space-between;
   flex-wrap: wrap;
   padding: 12px 0;
   border-top: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
+}
+
+.offre-salary-place {
+  display: flex;
+  gap: 20px;
 }
 
 .fact-inline {
