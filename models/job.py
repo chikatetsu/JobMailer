@@ -29,7 +29,7 @@ class Job(BaseModel):
     lon: float | None = None
     posted_date: datetime | None = None
     salary: Salary | None = None
-    skills: list[str] = []
+    skills: set[str] = set()
     experience: Experience
     remote_type: RemoteType
     contract_type: ContractType
@@ -44,18 +44,20 @@ class Job(BaseModel):
     candidate_status: CandidateStatus = CandidateStatus.NOT_APPLIED
     candidate_date: datetime | None = None
 
-    def get_interest(self, interest_input: InterestInput | None = None) -> int:
+    def get_interest_and_skills(self, interest_input: InterestInput | None = None) -> int:
         if interest_input is None:
             return self.interest
         pts = 0
         formatted_title = self.title.replace(" ", "").replace("\n", "").replace("-", "").strip().lower()
         for word, weight in interest_input.words_in_title.items():
             if word in formatted_title:
+                self.skills.add(word)
                 pts += weight
         full_description = self.title + self.description
         formatted_description = full_description.replace(" ", "").replace("\n", "").replace("-", "").strip().lower()
         for word, weight in interest_input.words_in_description.items():
             if word in formatted_description:
+                self.skills.add(word)
                 pts += weight
         self.interest = pts
         return pts

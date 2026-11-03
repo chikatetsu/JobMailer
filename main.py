@@ -16,8 +16,8 @@ if __name__ == "__main__":
     seen_jobs = job_repo.get_ids()
 
     jobs = scrape_jobs(SCRAPER_INPUT, SCRAPER_CONFIG, seen_jobs)
-    job_list = job_repo.to_job_list(jobs).remove_duplicates().get_company_infos_into_jobs(company_repo)
-    filtered = job_list.filter_jobs(FILTER_INPUT).sort_by_interest(INTEREST_INPUT)
+    job_list = job_repo.to_job_list(jobs).remove_duplicates().get_company_infos_into_jobs(company_repo).get_interest(INTEREST_INPUT)
+    filtered = job_list.filter_jobs(FILTER_INPUT).sort_by_interest()
     # filtered.to_csv(project_root / "data" / "jobs.csv")
     filtered.create_map(project_root / "web" / "templates" / "jobs_map.html")
 

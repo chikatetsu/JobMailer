@@ -74,9 +74,12 @@ class JobList:
                 filtered_jobs.append(job)
         return JobList(filtered_jobs)
 
-    def sort_by_interest(self, interest_input: InterestInput) -> "JobList":
+    def get_interest(self, interest_input: InterestInput) -> "JobList":
         for job in self.jobs:
-            job.get_interest(interest_input)
+            job.get_interest_and_skills(interest_input)
+        return JobList(self.jobs)
+
+    def sort_by_interest(self) -> "JobList":
         sorted_jobs = sorted(
             self.jobs,
             key=lambda t: t.interest,
