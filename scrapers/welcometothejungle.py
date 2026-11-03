@@ -82,7 +82,6 @@ class WelcomeToTheJungle(BaseScraper, SessionScraper):
             address=self.get_address(job_json),
             posted_date=self.get_posted_date(job_json),
             salary=self.get_salary(job_json),
-            skills=self.get_skills(),
             experience=self.get_experience(job_json, title),
             remote_type=self.get_remote_type(job_json),
             contract_type=self.get_contract_type(job_json, title),
@@ -149,10 +148,6 @@ class WelcomeToTheJungle(BaseScraper, SessionScraper):
         else:
             salary = Salary.from_raw(int(min_raw), int(max_raw), period)
         return salary
-
-    def get_skills(self) -> list[str]:
-        # TODO
-        return []
 
     def get_experience(self, job_json: dict, title) -> Experience:
         exp_raw = job_json.get("experience_level_minimum", None)

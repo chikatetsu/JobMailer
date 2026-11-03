@@ -90,7 +90,6 @@ class HelloWork(BaseScraper, SeleniumScraper):
             address=self.get_address(job_card),
             posted_date=self.get_posted_date(job_card),
             salary=self.get_salary(job_card),
-            skills=self.get_skills(job_card),
             experience=self.get_experience(more_soup, title),
             remote_type=self.get_remote_type(job_card),
             contract_type=self.get_contract_type(job_card, title),
@@ -211,10 +210,6 @@ class HelloWork(BaseScraper, SeleniumScraper):
             return None
 
         return Salary.from_raw(min_amount, max_amount, period_map[period])
-
-    def get_skills(self, job_card: Tag) -> list[str]:
-        # TODO
-        return []
 
     def get_experience(self, soup: BeautifulSoup, title: str) -> Experience:
         list_info = soup.find_all("li", class_="block tag-secondary-s border-0 readonly")

@@ -87,7 +87,6 @@ class ZipRecruiter(BaseScraper, SessionScraper):
             address=self.get_address(job),
             posted_date=self.get_posted_date(job),
             salary=self.get_salary(job),
-            skills=self.get_skills(),
             experience=self.get_experience(title),
             remote_type=self.get_remote_type(),
             contract_type=self.get_contract_type(),
@@ -137,10 +136,6 @@ class ZipRecruiter(BaseScraper, SessionScraper):
             max_amount = int(job["compensation_max"])
             currency = job.get("compensation_currency", "€")
             return Salary.from_raw(min_amount, max_amount, period, currency)
-
-    def get_skills(self) -> list[str]:
-        # TODO
-        return []
 
     def get_remote_type(self) -> RemoteType:
         # TODO

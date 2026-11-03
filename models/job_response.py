@@ -24,7 +24,7 @@ class JobList:
                 continue
             if job.contract_type not in filter_input.contract_types:
                 continue
-            all_text = job.title + job.description + "".join(job.skills)
+            all_text = job.title + job.description
             all_text = all_text.replace(" ", "").replace("\n", "").replace("-", "").strip().lower()
             if any(word in all_text for word in filter_input.ignore_words):
                 continue

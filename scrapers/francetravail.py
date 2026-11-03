@@ -128,7 +128,6 @@ class FranceTravail(BaseScraper):
             address=self.get_address(resp),
             posted_date=self.get_posted_date(resp),
             salary=self.get_salary(resp),
-            skills=self.get_skills(resp),
             experience=self.get_experience(resp, title),
             remote_type=self.get_remote_type(description),
             contract_type=self.get_contract_type(resp, title),
@@ -185,12 +184,6 @@ class FranceTravail(BaseScraper):
             return Experience.from_years_required(years_required)
         return BaseScraper.get_experience(self, title)
 
-    def get_skills(self, resp: dict) -> list[str]:
-        languages = [language["libelle"] for language in resp.get("langues", [])]
-        competences = [language["libelle"] for language in resp.get("competences", [])]
-        skills = competences + languages
-        return skills
-
     def get_salary(self, resp: dict) -> Salary | None:
         salary = resp["salaire"].get("libelle", "")
         if salary == "":
@@ -243,6 +236,9 @@ class FranceTravail(BaseScraper):
 
     def get_description(self, resp: dict) -> str:
         description = resp["description"].replace("L'entreprise accompagnée et les missions:", "").strip()
+        languages = [language["libelle"] for language in resp.get("langues", [])]
+        competences = [language["libelle"] for language in resp.get("competences", [])]
+        description += f"Compétences : {", ".join(competences)}, {", ".join(languages)}"
         return description
 
     def get_title(self, resp: dict) -> str:

@@ -47,6 +47,7 @@ const STATUS_TRANSITIONS = {
   ],
   WAITING_INTERVIEW_RESPONSE: [
     { to: 'WAITING_INTERVIEW_RESPONSE', dateMode: 'now' },
+    { to: 'INTERVIEW', dateMode: 'custom' },
     { to: 'ACCEPTED', dateMode: 'now' },
     { to: 'REJECTED', dateMode: 'now' },
   ],

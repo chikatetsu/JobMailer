@@ -98,7 +98,6 @@ class Indeed(BaseScraper, SeleniumScraper):
             address=self.get_address(job_card),
             posted_date=self.get_posted_date(),
             salary=self.get_salary(job_card),
-            skills=self.get_skills(),
             experience=self.get_experience(text),
             remote_type=self.get_remote_type(text),
             contract_type=self.get_contract_type(job_card),
@@ -164,10 +163,6 @@ class Indeed(BaseScraper, SeleniumScraper):
         elif period == "mois":
             return Salary.from_raw(min_amount, max_amount, SalaryPeriod.MONTHLY)
         return None
-
-    def get_skills(self) -> list[str]:
-        # TODO
-        return []
 
     def get_contract_type(self, job_card: Tag) -> ContractType:
         elements = job_card.find_all("li", attrs={"data-testid": "attribute_snippet_testid"})

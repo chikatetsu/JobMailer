@@ -108,7 +108,6 @@ class BaytScraper(BaseScraper, SessionScraper):
             address=self.get_address(job),
             posted_date=self.get_posted_date(),
             salary=self.get_salary(),
-            skills=self.get_skills(),
             experience=self.get_experience(title),
             remote_type=self.get_remote_type(title),
             contract_type=self.get_contract_type(),
@@ -141,9 +140,6 @@ class BaytScraper(BaseScraper, SessionScraper):
     def get_contract_type(self) -> ContractType:
         # TODO
         return ContractType.CDI
-
-    def get_skills(self, **kwargs) -> list[str]:
-        pass
 
     def get_salary(self) -> Salary | None:
         # TODO

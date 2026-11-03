@@ -127,7 +127,6 @@ class Tekkit(BaseScraper, SessionScraper):
             address=self.get_address(props),
             posted_date=self.get_posted_date(job_card),
             salary=self.get_salary(props),
-            skills=self.get_skills(props),
             experience=self.get_experience(props, title),
             remote_type=self.get_remote_type(props),
             contract_type=self.get_contract_type(props),
@@ -153,13 +152,12 @@ class Tekkit(BaseScraper, SessionScraper):
         return title
 
     def get_description(self, json_data: dict) -> str:
-        desc_entreprise_raw = json_data.get("descEntreprise", "")
-        missions_raw = json_data.get("missions", "")
-        profil_raw = json_data.get("profil", "")
-        desc_entreprise = desc_entreprise_raw if desc_entreprise_raw else ""
-        missions = missions_raw if missions_raw else ""
-        profil = profil_raw if profil_raw else ""
-        desc_raw = desc_entreprise + missions + profil
+        desc_entreprise = json_data.get("descEntreprise", "")
+        missions = json_data.get("missions", "")
+        profil = json_data.get("profil", "")
+        skills_raw = json_data.get("competences", [])
+        skills = ", ".join([skill.get("nom", "") for skill in skills_raw])
+        desc_raw = f"{desc_entreprise}\n\nMissions :\n{missions}\n\nProfil :\n{profil}\n\nCompétences\n{skills}"
         parsed = BeautifulSoup(desc_raw, "html.parser")
         description = parsed.get_text(strip=True)
         return description
@@ -207,11 +205,6 @@ class Tekkit(BaseScraper, SessionScraper):
         if min_salary and max_salary and period_salary:
             return Salary.from_raw(float(min_salary), float(max_salary), period_salary)
         return None
-
-    def get_skills(self, job_json: dict) -> list[str]:
-        skills_raw = job_json.get("competences", [])
-        skills = [skill.get("nom", "") for skill in skills_raw]
-        return skills
 
     def get_experience(self, job_json: dict, title: str) -> Experience:
         # if not infos or len(infos) < 2:

@@ -146,7 +146,6 @@ class LinkedIn(BaseScraper, SessionScraper):
             address=address,
             posted_date=self.get_posted_date(metadata_card),
             salary=self.get_salary(job_card),
-            skills=self.get_skills(),
             experience=experience,
             remote_type=self.get_remote_type(description),
             contract_type=contract_type,
@@ -234,10 +233,6 @@ class LinkedIn(BaseScraper, SessionScraper):
         if experience is None:
             return BaseScraper.get_experience(self, title)
         return experience
-
-    def get_skills(self) -> list[str]:
-        # TODO
-        return []
 
     def get_salary(self, job_card: Tag) -> Salary | None:
         salary_tag = job_card.find("span", class_="job-search-card__salary-info")

@@ -90,9 +90,6 @@ class BaseScraper(ABC):
     @abstractmethod
     def get_salary(self, **kwargs) -> Salary | None: ...
 
-    @abstractmethod
-    def get_skills(self, **kwargs) -> list[str]: ...
-
     def get_experience(self, title: str) -> Experience:
         title = title.lower()
         if "senior" in title:

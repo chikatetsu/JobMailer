@@ -134,7 +134,6 @@ class GoogleSearch(BaseScraper, SessionScraper):
             address=self.get_address(job_info),
             posted_date=self.get_posted_date(job_info),
             salary=self.get_salary(),
-            skills=self.get_skills(),
             experience=self.get_experience(title),
             remote_type=self.get_remote_type(description),
             contract_type=self.get_contract_type(),
@@ -246,9 +245,6 @@ class GoogleSearch(BaseScraper, SessionScraper):
         return date_posted
 
     def get_salary(self, **kwargs) -> Salary | None:
-        pass
-
-    def get_skills(self, **kwargs) -> list[str]:
         pass
 
     def get_contract_type(self, **kwargs) -> ContractType:

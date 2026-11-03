@@ -110,7 +110,6 @@ class Apec(BaseScraper, SeleniumScraper):
             address=self.get_address(details),
             posted_date=self.get_posted_date(details),
             salary=self.get_salary(details),
-            skills=self.get_skills(job_card),
             experience=self.get_experience(title),
             remote_type=self.get_remote_type(description),
             contract_type=self.get_contract_type(details),
@@ -171,10 +170,6 @@ class Apec(BaseScraper, SeleniumScraper):
         splitted_salary = salary_raw.split(" ")
         salary = Salary(min_amount=int(splitted_salary[0]), max_amount=int(splitted_salary[2]))
         return salary
-
-    def get_skills(self, job_card: Tag) -> list[str]:
-        # TODO
-        return []
 
     def get_contract_type(self, details: list[Tag]) -> ContractType:
         if len(details) < 2:

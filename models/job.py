@@ -29,7 +29,7 @@ class Job(BaseModel):
     lon: float | None = None
     posted_date: datetime | None = None
     salary: Salary | None = None
-    skills: list[str]
+    skills: list[str] = []
     experience: Experience
     remote_type: RemoteType
     contract_type: ContractType
@@ -52,7 +52,7 @@ class Job(BaseModel):
         for word, weight in interest_input.words_in_title.items():
             if word in formatted_title:
                 pts += weight
-        full_description = self.title + self.description + "".join(self.skills)
+        full_description = self.title + self.description
         formatted_description = full_description.replace(" ", "").replace("\n", "").replace("-", "").strip().lower()
         for word, weight in interest_input.words_in_description.items():
             if word in formatted_description:
@@ -88,7 +88,7 @@ class Job(BaseModel):
             "lon": self.lon if self.lon else "",
             "posted_date": self.posted_date.strftime("%d/%m/%Y") if self.posted_date else "",
             "salary": str(self.salary) if self.salary else "",
-            "skills": ", ".join(self.skills),
+            "skills": ";".join(self.skills),
             "experience": str(self.experience),
             "remote_type": str(self.remote_type),
             "contract_type": str(self.contract_type),
