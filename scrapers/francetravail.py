@@ -238,7 +238,7 @@ class FranceTravail(BaseScraper):
         description = resp["description"].replace("L'entreprise accompagnée et les missions:", "").strip()
         languages = [language["libelle"] for language in resp.get("langues", [])]
         competences = [language["libelle"] for language in resp.get("competences", [])]
-        description += f"Compétences : {", ".join(competences)}, {", ".join(languages)}"
+        description += f"Compétences : {', '.join(competences)}, {', '.join(languages)}"
         return description
 
     def get_title(self, resp: dict) -> str:
