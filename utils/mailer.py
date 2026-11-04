@@ -60,9 +60,16 @@ def format_email_body(subject: str, new_jobs: JobList, already_saved_jobs: JobLi
                     </p>
                 </div>
                 <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px;">
-                  { f'<span style="background:rgba(139,143,154,0.12);color:#8b8f9a;font-size:11px;font-weight:600;padding:3px 9px;border-radius:10px;">{job.contract_type.value}</span>' if job.contract_type else "" }
-                  { f'<span style="background:rgba(139,143,154,0.12);color:#8b8f9a;font-size:11px;font-weight:600;padding:3px 9px;border-radius:10px;">{job.remote_type.value}</span>' if job.remote_type else "" }
-                  { f'<span style="background:rgba(139,143,154,0.12);color:#8b8f9a;font-size:11px;font-weight:600;padding:3px 9px;border-radius:10px;">{job.experience.value}</span>' if job.experience else "" }
+                    { f'<span style="background:rgba(139,143,154,0.12);color:#8b8f9a;font-size:11px;font-weight:600;padding:3px 9px;border-radius:10px;">{job.contract_type.value}</span>' if job.contract_type else "" }
+                    { f'<span style="background:rgba(139,143,154,0.12);color:#8b8f9a;font-size:11px;font-weight:600;padding:3px 9px;border-radius:10px;">{job.remote_type.value}</span>' if job.remote_type else "" }
+                    { f'<span style="background:rgba(139,143,154,0.12);color:#8b8f9a;font-size:11px;font-weight:600;padding:3px 9px;border-radius:10px;">{job.experience.value}</span>' if job.experience else "" }
+                </div>
+                <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px;">
+                    {
+                        ''.join([
+                        f'<span style="background:rgba(139,143,154,0.12);color:#8b8f9a;font-size:11px;font-weight:600;padding:3px 9px;border-radius:10px;">{skill.capitalize()}</span>'
+                        for skill in job.skills])
+                    }
                 </div>
             </div>
             '''
