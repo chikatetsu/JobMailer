@@ -32,9 +32,9 @@ if __name__ == "__main__":
     new_jobs = job_repo.get_new_jobs(job_list)
     deleted_jobs = job_repo.get_deleted_jobs(job_list)
     already_saved_jobs = job_repo.get_already_saved_jobs(job_list)
-    job_repo.update_jobs(new_jobs, deleted_jobs) # job_list)
+    job_repo.update_jobs(new_jobs, deleted_jobs, already_saved_jobs) # job_list)
 
-    new_jobs = new_jobs.filter_jobs(FILTER_INPUT).sort_by_interest(INTEREST_INPUT)
-    deleted_jobs = deleted_jobs.filter_jobs(FILTER_INPUT).sort_by_interest(INTEREST_INPUT)
-    already_saved_jobs = already_saved_jobs.filter_jobs(FILTER_INPUT).remove_seen_jobs().sort_by_interest(INTEREST_INPUT)
+    new_jobs = new_jobs.filter_jobs(FILTER_INPUT).sort_by_interest()
+    deleted_jobs = deleted_jobs.filter_jobs(FILTER_INPUT).sort_by_interest()
+    already_saved_jobs = already_saved_jobs.filter_jobs(FILTER_INPUT).remove_seen_jobs().sort_by_interest()
     send_mail(new_jobs, already_saved_jobs, deleted_jobs, growth)

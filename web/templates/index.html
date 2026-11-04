@@ -102,6 +102,14 @@
       {% endif %}
     </div>
 
+    {% if o.skills and o.skills|length > 0 %}
+    <div class="offre-skills">
+      {% for skill in o.skills %}
+      <span class="tag">{{ skill.capitalize() }}</span>
+      {% endfor %}
+    </div>
+    {% endif %}
+
     <div class="bottom-part {% if o.is_ignored %}hidden{% endif %}">
       {% if o.description %}
       <div class="offre-description-wrap">

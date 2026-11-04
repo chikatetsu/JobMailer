@@ -99,7 +99,7 @@ def _build_options():
 @app.route("/")
 def index():
     jobs = job_repo.get_all_jobs()
-    sorted_jobs = jobs.filter_jobs(FILTER_INPUT).sort_by_interest(INTEREST_INPUT)
+    sorted_jobs = jobs.filter_jobs(FILTER_INPUT).sort_by_interest()
     return render_template("index.html", jobs=sorted_jobs.jobs, active_page="jobs")
 
 @app.route("/companies")

@@ -66,7 +66,7 @@ class JobRepository:
             lon=row["lon"],
             posted_date=row["posted_date"],
             salary=Salary(min_amount=row["salary_min"], max_amount=row["salary_max"]),
-            skills=set(row["skills"].split(";")),
+            skills=set(row["skills"].split(";")) if row["skills"] else set(),
             experience=Experience.from_str(row["experience"]),
             remote_type=RemoteType.from_str(row["remote_type"]),
             contract_type=ContractType.from_str(row["contract_type"]),
@@ -278,7 +278,7 @@ class JobRepository:
             self.log.error(e)
             return False
 
-    def update_jobs(self, new_jobs: JobList, deleted_jobs: JobList):
+    def update_jobs(self, new_jobs: JobList, deleted_jobs: JobList, already_saved_jobs: JobList):
         try:
             for job in deleted_jobs:
                 self.conn.execute("DELETE FROM jobs WHERE id = ? AND candidate_status IN ('Not applied', 'Rejected')", (job.id,))
@@ -321,6 +321,9 @@ class JobRepository:
                     "candidate_status": str(job.candidate_status),
                     "candidate_date": job.candidate_date
                 })
+
+            for job in already_saved_jobs:
+                self.update_job(job.id, job)
             self.conn.commit()
         except Exception as e:
             self.log.error(f"Couldn't insert new jobs : {e}")

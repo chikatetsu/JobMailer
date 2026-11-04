@@ -50,12 +50,16 @@ class Job(BaseModel):
         pts = 0
         formatted_title = self.title.replace(" ", "").replace("\n", "").replace("-", "").strip().lower()
         for word, weight in interest_input.words_in_title.items():
+            if word == "":
+                continue
             if word in formatted_title:
                 self.skills.add(word)
                 pts += weight
         full_description = self.title + self.description
         formatted_description = full_description.replace(" ", "").replace("\n", "").replace("-", "").strip().lower()
         for word, weight in interest_input.words_in_description.items():
+            if word == "":
+                continue
             if word in formatted_description:
                 self.skills.add(word)
                 pts += weight

@@ -40,7 +40,6 @@
 .offre {
   display: flex;
   flex-direction: column;
-  gap: 14px;
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: 12px;
@@ -137,6 +136,14 @@
   flex-wrap: wrap;
   padding: 12px 0;
   border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.offre-skills {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  padding: 3px 0;
   border-bottom: 1px solid var(--border);
 }
 
