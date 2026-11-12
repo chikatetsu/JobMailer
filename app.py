@@ -3,7 +3,7 @@ from pathlib import Path
 
 from flask import Flask, render_template, redirect, jsonify, abort, request
 
-from config import INTEREST_INPUT, FILTER_INPUT, SCRAPER_INPUT, JOB_MAILER_PORT
+from config import FILTER_INPUT, SCRAPER_INPUT, JOB_MAILER_PORT
 from models.candidate_status import CandidateStatus
 from models.city import City
 from models.contract_type import ContractType
@@ -226,21 +226,32 @@ def edit_company(company_id):
         abort(404)
     params = request.get_json()
     company_name = params.get("name", None)
+    company_address = params.get("address", None)
     company_hiring = params.get("hiring", None)
     company_website = params.get("website", None)
+    company_siren = params.get("siren", None)
+    company_tranch_employees = params.get("tranch_employees", None)
+    company_main_activity = params.get("main_activity", None)
+    company_type = params.get("compan_type", None)
+    company_is_siege = params.get("is_siege", None)
 
     if company_website is not None and company.url != company_website:
-        success = company_repo.set_website(company_id, company_website)
-        if not success:
-            abort(400)
-        company = company_repo.get_company_by_id(company_id)
-        if company is None:
-            abort(404)
+        company.set_website(company_website)
+    if company_address is not None and company.address != company_address:
+        company.set_address(company_address)
+    if company_siren is not None and company.siren != company_siren:
+        company.siren = company_siren
+    if company_tranch_employees is not None and company.tranch_employees != company_tranch_employees:
+        company.tranch_employees = company_tranch_employees
+    if company_main_activity is not None and company.main_activity != company_main_activity:
+        company.main_activity = company_main_activity
+    if company_type is not None and company.company_type != company_type:
+        company.company_type = company_type
+    if company_is_siege is not None and company.is_siege != company_is_siege:
+        company.is_siege = company_is_siege
 
     if company_name is not None and company.name != company_name.upper():
-        success = company_repo.set_name(company_id, company_name.upper())
-        if not success:
-            abort(400)
+        company.name = company_name.upper()
         jobs = job_repo.get_all_jobs()
         for job in jobs:
             if job.company_id is None and job.company.upper() == company_name.upper():
@@ -259,6 +270,10 @@ def edit_company(company_id):
         success = company_repo.set_dev_hiring(company_id, dev_hiring)
         if not success:
             abort(400)
+
+    success = company_repo.update_company(company_id, company)
+    if not success:
+        abort(400)
 
     # new_company = company_repo.get_company_by_id(company_id)
     # return jsonify(new_company)

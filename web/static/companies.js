@@ -35,7 +35,18 @@ companyList.addEventListener('click', async (e) => {
     const btnEdit = e.target.closest('.btn-modifier');
     if (btnEdit) {
         e.preventDefault();
-        openEditModal(company.dataset.id, company.dataset.name, company.dataset.hiring, company.dataset.website);
+        openEditModal(
+            company.dataset.id,
+            company.dataset.name,
+            company.dataset.address,
+            company.dataset.hiring,
+            company.dataset.website,
+            company.dataset.siren,
+            company.dataset.tranch_employees,
+            company.dataset.main_activity,
+            company.dataset.company_type,
+            company.dataset.is_siege
+        );
         return;
     }
 });
@@ -67,16 +78,28 @@ function searchCompany() {
 const editModal = document.getElementById('edit-modal');
 const editModalId = document.getElementById('edit-modal-id');
 const editModalName = document.getElementById('edit-modal-name');
+const editModalAddress = document.getElementById('edit-modal-address');
 const editModalHiring = document.getElementById('edit-modal-hiring');
 const editModalWebsite = document.getElementById('edit-modal-website');
+const editModalSiren = document.getElementById('edit-modal-siren');
+const editModalTranchEmployees = document.getElementById('edit-modal-tranch-employees');
+const editModalMainActivity = document.getElementById('edit-modal-main-activity');
+const editModalCompanyType = document.getElementById('edit-modal-company-type');
+const editModalIsSiege = document.getElementById('edit-modal-is-siege');
 const editModalCancel = document.getElementById('edit-modal-cancel');
 const editModalSave = document.getElementById('edit-modal-save');
 
-function openEditModal(companyId, companyName, companyHiring, companyWebsite) {
+function openEditModal(companyId, companyName, companyAddress, companyHiring, companyWebsite, companySiren, companyTranchEmployees, companyMainActivity, companyType, companyIsSiege) {
     editModalId.innerText = companyId;
     editModalName.value = companyName;
+    editModalAddress.value = companyAddress;
     editModalHiring.value = companyHiring;
     editModalWebsite.value = companyWebsite;
+    editModalSiren.value = companySiren;
+    editModalTranchEmployees.value = companyTranchEmployees;
+    editModalMainActivity.value = companyMainActivity;
+    editModalCompanyType.value = companyType;
+    editModalIsSiege.value = companyIsSiege;
     editModal.hidden = false;
     document.body.style.overflow = 'hidden';
 }
@@ -85,12 +108,19 @@ function closeEditModal() {
     editModal.hidden = true;
     document.body.style.overflow = '';
 }
+
 async function editCompany() {
     const url = `/api/edit_company/${editModalId.innerText}`;
     const data = {
         name: editModalName.value,
+        address: editModalAddress.value,
         hiring: editModalHiring.value,
         website: editModalWebsite.value,
+        siren: editModalSiren.value,
+        tranch_employees: editModalTranchEmployees.value,
+        main_activity: editModalMainActivity.value,
+        company_type: editModalCompanyType.value,
+        is_siege: editModalIsSiege.value
     };
     const response = await fetch(url, {
         method: 'PUT',

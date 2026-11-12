@@ -1,5 +1,7 @@
 from datetime import datetime
 from pydantic import BaseModel
+from geopy.extra.rate_limiter import RateLimiter
+from geopy.geocoders import Nominatim
 
 from models.city import City
 from utils.company_sorting import ScoreDetail, NAF_OVERRIDES, NAF_SECTIONS, DevHiring, TRANCH_STEP_DOWN, CATJUR_STEP_DOWN
@@ -192,3 +194,16 @@ class Company(BaseModel):
         }
         activity_name = company_activity_map.get(self.main_activity.replace(".", "").replace(" ", "")[:4], self.main_activity)
         return activity_name
+
+    def set_website(self, website):
+        self.url = website
+        self.logo = f"https://www.google.com/s2/favicons?domain={website}&sz=128"
+
+    def set_address(self, address):
+        self.address = address
+        geolocator = Nominatim(user_agent="mon_app_carte")
+        geocode = RateLimiter(geolocator.geocode, min_delay_seconds=1)
+        location = geocode(address)
+        if location:
+            self.lat = location.latitude
+            self.lon = location.longitude

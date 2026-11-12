@@ -196,3 +196,35 @@ body:has(.map-frame) .page-main {
   padding: 3px 9px;
   border-radius: 10px;
 }
+
+/* ---------- Bouton flottant "Ajouter" ---------- */
+
+.fab {
+    position: fixed;
+    right: 24px;
+    bottom: 24px;
+    height: 56px;
+    padding: 0 12px;
+    border-radius: 10px;
+    background: var(--accent);
+    color: white;
+    border: none;
+    font-size: 20px;
+    line-height: 1;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+    transition: transform .15s, background .15s;
+    z-index: 15;
+}
+.fab:hover {
+    transform: scale(1.08);
+    background: color-mix(in srgb, var(--accent) 85%, white);
+}
+
+/* Sur mobile, on remonte le bouton au-dessus de la tab bar du bas */
+@media (max-width: 640px) {
+    .fab {
+        right: 16px;
+        bottom: calc(76px + env(safe-area-inset-bottom));
+    }
+}

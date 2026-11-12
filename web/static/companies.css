@@ -133,7 +133,7 @@ input {
     border: 1px solid var(--border);
     color: var(--text-dim);
     border-radius: 8px;
-    width: 80%;
+    width: 70%;
     padding: 4px 8px;
     cursor: text;
     white-space: nowrap;
@@ -148,7 +148,7 @@ select {
     border: 1px solid var(--border);
     color: var(--text-dim);
     border-radius: 8px;
-    width: 60%;
+    width: 70%;
     padding: 4px 8px;
     cursor: pointer;
     white-space: nowrap;
@@ -164,6 +164,8 @@ select:focus {
 
 .modal-element {
     margin-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
 }
 
 .modal-buttons {

@@ -19,8 +19,14 @@
   <article class="company-card"
            data-id="{{ c.id }}"
            data-name="{{ c.name.title() }}"
+           data-address="{{ c.address }}"
            data-hiring="{{ c.dev_hiring.value }}"
-           data-website="{{ c.url }}">
+           data-website="{{ c.url }}"
+           data-siren="{{ c.siren }}"
+           data-tranch_employees="{{ c.tranch_employees }}"
+           data-main_activity="{{ c.main_activity }}"
+           data-company_type="{{ c.company_type }}"
+           data-is_siege="{{ c.is_siege }}">
     <div class="company-logo">
       {% if c.logo %}
       <img src="{{ c.logo }}" alt="" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
@@ -79,19 +85,67 @@
     <span id="edit-modal-id" hidden></span>
     <form>
       <div class="modal-element">
+        <label for="edit-modal-name">Entreprise</label>
         <input type="text" name="edit-modal-name" id="edit-modal-name">
       </div>
       <div class="modal-element">
-        <select name="edit-modal-hiring" id="edit-modal-hiring">
-        <option value="4">Yes</option>
-        <option value="3">Probably</option>
-        <option value="2">Doubt</option>
-        <option value="1">No</option>
-      </select>
+        <label for="edit-modal-address">Addresse</label>
+        <input type="text" name="edit-modal-address" id="edit-modal-address">
       </div>
       <div class="modal-element">
+        <label for="edit-modal-hiring">Embauche</label>
+        <select name="edit-modal-hiring" id="edit-modal-hiring">
+          <option value="4">Yes</option>
+          <option value="3">Probably</option>
+          <option value="2">Doubt</option>
+          <option value="1">No</option>
+        </select>
+      </div>
+      <div class="modal-element">
+        <label for="edit-modal-website">Site web</label>
         <input type="text" name="edit-modal-website" id="edit-modal-website">
       </div>
+
+      <div class="modal-element">
+        <label for="edit-modal-siren">Siren</label>
+        <input type="text" name="edit-modal-siren" id="edit-modal-siren">
+      </div>
+      <div class="modal-element">
+        <label for="edit-modal-tranch-employees">Nombre d'employés</label>
+        <select name="edit-modal-tranch-employees" id="edit-modal-tranch-employees">
+          <option value="00">Aucun salarié</option>
+          <option value="01">1 à 2 salariés</option>
+          <option value="02">3 à 5 salariés</option>
+          <option value="03">6 à 9 salariés</option>
+          <option value="11">10 à 19 salariés</option>
+          <option value="12">20 à 49 salariés</option>
+          <option value="21">50 à 99 salariés</option>
+          <option value="22">100 à 199 salariés</option>
+          <option value="31">200 à 249 salariés</option>
+          <option value="32">250 à 499 salariés</option>
+          <option value="41">500 à 999 salariés</option>
+          <option value="42">1000 à 1999 salariés</option>
+          <option value="51">2000 à 4999 salariés</option>
+          <option value="52">5000 à 9999 salariés</option>
+          <option value="53">plus de 10 000 salariés</option>
+        </select>
+      </div>
+      <div class="modal-element">
+        <label for="edit-modal-main-activity">Activité principale</label>
+        <input type="text" name="edit-modal-main-activity" id="edit-modal-main-activity">
+      </div>
+      <div class="modal-element">
+        <label for="edit-modal-company-type">Type d'entreprise</label>
+        <input type="text" name="edit-modal-company-type" id="edit-modal-company-type">
+      </div>
+      <div class="modal-element">
+        <label for="edit-modal-is-siege">Établissement siège</label>
+        <select name="edit-modal-is-siege" id="edit-modal-is-siege">
+          <option value="True">Oui</option>
+          <option value="False">Non</option>
+        </select>
+      </div>
+
       <div class="modal-buttons">
         <button id="edit-modal-cancel">Annuler</button>
         <button id="edit-modal-save">Sauvegarder</button>
@@ -99,6 +153,8 @@
     </form>
   </div>
 </div>
+
+<!--<button id="btn-add-company" class="fab" aria-label="Ajouter une entreprise" title="Ajouter une entreprise">Ajouter</button>-->
 {% endblock %}
 
 {% block scripts %}

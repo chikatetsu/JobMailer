@@ -170,10 +170,9 @@ class CompanyRepository:
             self.log.error(f"Failed to set company dev_hiring: {e}")
             return False
 
-    def set_website(self, company_id: int, company_url: str) -> bool:
+    def set_website(self, company_id: int, company_url: str, company_logo: str) -> bool:
         try:
-            logo = f"https://www.google.com/s2/favicons?domain={company_url}&sz=128"
-            self.conn.execute("UPDATE companies SET url = ?, logo = ? WHERE id = ?", (company_url, logo, company_id))
+            self.conn.execute("UPDATE companies SET url = ?, logo = ? WHERE id = ?", (company_url, company_logo, company_id))
             self.conn.commit()
             return True
         except Exception as e:
