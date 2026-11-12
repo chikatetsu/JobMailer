@@ -142,10 +142,10 @@ def job_map():
 def see_job(job_id):
     job = job_repo.get_job_by_id(job_id)
     if job is None:
-        abort(404)
+        abort(404, "Job not found")
     success = job_repo.see_job(job_id)
     if not success:
-        abort(400)
+        abort(400, "Couln't update the database")
     if job.real_url != "":
         return redirect(job.real_url, code=302)
     return redirect(job.source_url, code=302)
@@ -154,76 +154,76 @@ def see_job(job_id):
 def mark_as_seen(job_id):
     job = job_repo.get_job_by_id(job_id)
     if not job:
-        abort(404)
+        abort(404, "Job not found")
     success = job_repo.see_job(job_id)
     if not success:
-        abort(400)
+        abort(400, "Couln't update the database")
     return jsonify({"ok": True})
 
 @app.route("/api/mark_as_unseen/<job_id>", methods=["POST"])
 def mark_as_unseen(job_id):
     job = job_repo.get_job_by_id(job_id)
     if not job:
-        abort(404)
+        abort(404, "Job not found")
     success = job_repo.unsee_job(job_id)
     if not success:
-        abort(400)
+        abort(400, "Couln't update the database")
     return jsonify({"ok": True})
 
 @app.route("/api/update_candidate_status/<job_id>", methods=["POST"])
 def update_candidate_status(job_id):
     job = job_repo.get_job_by_id(job_id)
     if not job:
-        abort(404)
+        abort(404, "Job not found")
     candidate_status_raw = request.args.get('candidate_status', None)
     if candidate_status_raw is None:
-        abort(400)
+        abort(400, "Please send candidate_status in parameters")
     candidate_status = CandidateStatus.from_str(candidate_status_raw)
     if candidate_status is None:
-        abort(404)
+        abort(404, "Couldn't parse candidate_status")
     candidate_date = request.args.get('candidate_date', None)
     if candidate_date is not None:
         candidate_date = datetime.strptime(candidate_date, "%Y-%m-%d %H:%M:%S")
     success = job_repo.update_candidate_status(job_id, candidate_status, candidate_date)
     if not success:
-        abort(404)
+        abort(404, "Couldn't update the database")
     return jsonify({"ok": True})
 
 @app.route("/api/ignore_job/<job_id>", methods=["POST"])
 def ignore_job(job_id):
     job = job_repo.get_job_by_id(job_id)
     if job is None:
-        abort(404)
+        abort(404, "Job not found")
     success = job_repo.ignore_job(job_id)
     if not success:
-        abort(400)
+        abort(400, "Couln't update the database")
     return jsonify({"ok": True})
 
 @app.route("/api/unignore_job/<job_id>", methods=["POST"])
 def unignore_job(job_id):
     job = job_repo.get_job_by_id(job_id)
     if job is None:
-        abort(404)
+        abort(404, "Job not found")
     success = job_repo.unignore_job(job_id)
     if not success:
-        abort(400)
+        abort(400, "Couln't update the database")
     return jsonify({"ok": True})
 
 @app.route("/api/create_spontaneous_application/<company_id>", methods=["POST"])
 def create_spontaneous_application(company_id):
     company = company_repo.get_company_by_id(company_id)
     if company is None:
-        abort(404)
+        abort(404, "Company not found")
     job = job_repo.create_spontaneous_application(company)
     if not job:
-        abort(400)
+        abort(400, "Couldn't create spontaneous application")
     return jsonify({"ok": True})
 
 @app.route("/api/edit_company/<company_id>", methods=["PUT"])
 def edit_company(company_id):
     company = company_repo.get_company_by_id(company_id)
     if company is None:
-        abort(404)
+        abort(404, "Company not found")
     params = request.get_json()
     company_name = params.get("name", None)
     company_address = params.get("address", None)
@@ -266,14 +266,14 @@ def edit_company(company_id):
     if company_hiring is not None and company.dev_hiring != int(company_hiring):
         dev_hiring = DevHiring.from_int(int(company_hiring))
         if dev_hiring is None:
-            abort(404)
+            abort(404, "Couln't parse dev_hiring")
         success = company_repo.set_dev_hiring(company_id, dev_hiring)
         if not success:
-            abort(400)
+            abort(400, "Couln't set dev_hiring")
 
     success = company_repo.update_company(company_id, company)
     if not success:
-        abort(400)
+        abort(400, "Couldn't update the database")
 
     # new_company = company_repo.get_company_by_id(company_id)
     # return jsonify(new_company)
