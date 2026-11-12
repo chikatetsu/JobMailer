@@ -249,6 +249,11 @@ def edit_company(company_id):
         company.company_type = company_type
     if company_is_siege is not None and company.is_siege != company_is_siege:
         company.is_siege = company_is_siege
+    if company_hiring is not None and company.dev_hiring != int(company_hiring):
+        dev_hiring = DevHiring.from_int(int(company_hiring))
+        if dev_hiring is None:
+            abort(404, "Couln't parse dev_hiring")
+        company.dev_hiring = dev_hiring
 
     if company_name is not None and company.name != company_name.upper():
         company.name = company_name.upper()
@@ -262,14 +267,6 @@ def edit_company(company_id):
                 job.lon = company.lon
                 job.lat = company.lat
                 job_repo.update_job(job.id, job)
-
-    if company_hiring is not None and company.dev_hiring != int(company_hiring):
-        dev_hiring = DevHiring.from_int(int(company_hiring))
-        if dev_hiring is None:
-            abort(404, "Couln't parse dev_hiring")
-        success = company_repo.set_dev_hiring(company_id, dev_hiring)
-        if not success:
-            abort(400, "Couln't set dev_hiring")
 
     success = company_repo.update_company(company_id, company)
     if not success:
