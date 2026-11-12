@@ -239,6 +239,14 @@ def edit_company(company_id):
         company.set_website(company_website)
     if company_address is not None and company.address != company_address:
         company.set_address(company_address)
+        jobs = job_repo.get_all_jobs()
+        for job in jobs:
+            if job.company_id == company_id:
+                job.address = company.address
+                job.lon = company.lon
+                job.lat = company.lat
+                job_repo.update_job(job.id, job)
+
     if company_siren is not None and company.siren != company_siren:
         company.siren = company_siren
     if company_tranch_employees is not None and company.tranch_employees != company_tranch_employees:
