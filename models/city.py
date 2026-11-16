@@ -2,8 +2,9 @@ from enum import Enum
 
 
 class CityCode:
-    def __init__(self, name: str, postal: str, city_code: str, insee_codes: set[str] | None = None, lat: float = 0.0, lon: float = 0.0):
+    def __init__(self, name: str, departement: str, postal: str, city_code: str, insee_codes: set[str] | None = None, lat: float = 0.0, lon: float = 0.0):
         self.name = name
+        self.departement = departement
         self.postal = postal
         self.city_code = city_code
         self.insee_codes = insee_codes if insee_codes is not None else []
@@ -12,7 +13,7 @@ class CityCode:
 
 
 class City(Enum):
-    PARIS = CityCode("Paris", "75000", "75001", {
+    PARIS = CityCode("Paris", "Paris", "75000", "75001", {
         '75056', '75101', '75102', '75103', '75104', '75105', '75106', '75107', '75108', '75109', '75110', '75111',
         '75112', '75113', '75114', '75115', '75116', '75117', '75118', '75119', '75120', '77001', '77002', '77003',
         '77004', '77005', '77006', '77007', '77008', '77009', '77010', '77011', '77012', '77013', '77014', '77015',
@@ -123,40 +124,40 @@ class City(Enum):
         '95604', '95607', '95610', '95611', '95612', '95625', '95627', '95628', '95633', '95637', '95641', '95651',
         '95652', '95656', '95658', '95660', '95675', '95676', '95678', '95680', '95682', '95690'
     }, lat=48.8575475, lon=2.3513765)
-    LYON = CityCode("Lyon", "69000", "69123", {
+    LYON = CityCode("Lyon", "Rhône", "69000", "69123", {
         "69123", "69003", "69029", "69033", "69034", "69040", "69044", "69046", "69271", "69063", "69273", "69068",
         "69069", "69071", "69072", "69275", "69081", "69276", "69085", "69087", "69088", "69089", "69278", "69091",
         "69096", "69100", "69279", "69116", "69117", "69127", "69282", "69283", "69284", "69142", "69143", "69149",
         "69153", "69163", "69286", "69168", "69191", "69194", "69202", "69199", "69204", "69205", "69207", "69290",
         "69233", "69292", "69293", "69296", "69244", "69250", "69256", "69259", "69260", "69266"
     }, lat=45.764043, lon=4.835659)
-    TOULOUSE = CityCode("Toulouse", "31000", "31555", {
+    TOULOUSE = CityCode("Toulouse", "Haute-Garonne", "31000", "31555", {
         "31555", "31003", "31022", "31032", "31044", "31053", "31056", "31069", "31088", "31091", "31116", "31149",
         "31150", "31157", "31163", "31182", "31184", "31186", "31205", "31230", "31282", "31293", "31351", "31352",
         "31355", "31389", "31417", "31418", "31445", "31467", "31488", "31490", "31506", "31541", "31557", "31561",
         "31588"
     }, lat=43.6048462, lon=1.442848)
-    NANTES = CityCode("Nantes", "44000", "44109", {
+    NANTES = CityCode("Nantes", "Loire-Atlantique", "44000", "44109", {
         "44109", "44009", "44018", "44020", "44024", "44026", "44035", "44047", "44074", "44094", "44101", "44114",
-        "44143", "44150", "44162", "44166", "44171", "44190", "44172", "44194", "44198", "44204", "44215", "44071",
-        "44169"
+        "44640", "44143", "44150", "44162", "44166", "44171", "44166", "44171", "44190", "44172", "44194", "44198",
+        "44204", "44215", "44071", "44169"
     }, lat=47.218371, lon=-1.553621)
-    MONTPELLIER = CityCode("Montpellier", "34000", "34172", {
+    MONTPELLIER = CityCode("Montpellier", "Hérault", "34000", "34172", {
         "34172", "34022", "34027", "34057", "34058", "34077", "34087", "34088", "34090", "34095", "34116", "34120",
         "34123", "34129", "34134", "34164", "34169", "34179", "34198", "34202", "34217", "34227", "34244", "34249",
         "34256", "34259", "34270", "34295", "34307", "34327", "34337"
     }, lat=43.6108535, lon=3.8761323)
-    STRASBOURG = CityCode("Strasbourg", "67000", "67482", {
+    STRASBOURG = CityCode("Strasbourg", "Bas-Rhin", "67000", "67482", {
         "67482", "67001", "67043", "67049", "67065", "67118", "67119", "67124", "67131", "67137", "67152", "67182",
         "67204", "67212", "67218", "67247", "67256", "67267", "67268", "67296", "67309", "67326", "67343", "67350",
         "67363", "67365", "67378", "67389", "67447", "67471", "67506", "67519", "67551"
     }, lat=48.5734053, lon=7.752111299999999)
-    BORDEAUX = CityCode("Bordeaux", "33000", "33063", {
+    BORDEAUX = CityCode("Bordeaux", "Gironde", "33000", "33063", {
         "33063", "33003", "33004", "33013", "33032", "33039", "33056", "33065", "33069", "33075", "33096", "33119",
         "33162", "33167", "33192", "33200", "33249", "33273", "33281", "33312", "33318", "33376", "33434", "33449",
         "33487", "33519", "33522", "33550"
     }, lat=44.8416106, lon=-0.5810938000000001)
-    LILLE = CityCode("Lille", "59000", "59350", {
+    LILLE = CityCode("Lille", "Nord", "59000", "59350", {
         "59350", "59005", "59011", "59013", "59017", "59025", "59044", "59051", "59052", "59056", "59088", "59090",
         "59098", "59106", "59128", "59133", "59143", "59146", "59152", "59163", "59173", "59670", "59193", "59195",
         "59196", "59201", "59202", "59208", "59220", "59247", "59250", "59252", "59256", "59257", "59275", "59278",
@@ -166,101 +167,126 @@ class City(Enum):
         "59523", "59524", "59527", "59550", "59553", "59560", "59566", "59585", "59598", "59599", "59602", "59609",
         "59611", "59009", "59636", "59643", "59646", "59648", "59650", "59653", "59656", "59658", "59660"
     }, lat=50.624378, lon=3.0678588)
-    RENNES = CityCode("Rennes", "35000","35238", {
+    RENNES = CityCode("Rennes", "Ille-et-Vilaine", "35000","35238", {
         "35238", "35001", "35024", "35032", "35039", "35047", "35051", "35055", "35059", "35065", "35066", "35076",
         "35079", "35080", "35081", "35088", "35131", "35139", "35180", "35189", "35196", "35204", "35206", "35208",
         "35210", "35216", "35363", "35240", "35250", "35266", "35275", "35278", "35281", "35315", "35334", "35352",
         "35353"
     }, lat=48.117266, lon=-1.6777926)
-    AIX_EN_PROVENCE = CityCode("Aix-en-Provence", "13090", "13001", {
+    AIX_EN_PROVENCE = CityCode("Aix-en-Provence", "Bouches-du-Rhône", "13090", "13001", {
         "13001", "13012", "15367", "13019", "13025", "13118", "13032", "13040", "13041", "13046", "13048", "13050",
         "13059", "13060", "13062", "13071", "84089", "13072", "13074", "13079", "13080", "13082", "13084", "13087",
         "13090", "13091", "13093", "13095", "13099", "13107", "13109", "13110", "13111", "13113", "13114", "13117"
     }, lat=43.5323032, lon=5.4509692)
-    MARSEILLE = CityCode("Marseille", "13000", "13055")
-    NICE = CityCode("Nice", "06000", "6088")
-    TOULON = CityCode("Toulon", "83000", "83137")
-    REIMS = CityCode("Reims", "51100", "51454")
-    SAINT_ETIENNE = CityCode("Saint-Étienne", "42000", "42218")
-    LE_HAVRE = CityCode("Le Havre", "76600", "76351")
-    VILLEURBANNE = CityCode("Villeurbanne", "69100", "69266")
-    DIJON = CityCode("Dijon", "21000", "21231")
-    ANGERS = CityCode("Angers", "49000", "49007")
-    GRENOBLE = CityCode("Grenoble", "38000", "38185")
-    SAINT_DENIS = CityCode("Saint-Denis", "97400", "97411")
-    NIMES = CityCode("Nîmes", "30000", "30189")
-    CLERMONT_FERRAND = CityCode("Clermont-Ferrand", "63000", "63113")
-    LE_MANS = CityCode("Le Mans", "72000", "72181")
-    BREST = CityCode("Brest", "29200", "29019")
-    TOURS = CityCode("Tours", "37000", "37261")
-    AMIENS = CityCode("Amiens", "80000", "80021")
-    ANNECY = CityCode("Annecy", "74000", "74010")
-    LIMOGES = CityCode("Limoges", "87000", "87085")
-    METZ = CityCode("Metz", "57000", "57463")
-    PERPIGNAN = CityCode("Perpignan", "66000", "66136")
-    BOULOGNE_BILLANCOURT = CityCode("Boulogne-Billancourt", "92100", "92012")
-    BESANCON = CityCode("Besançon", "25000", "25056")
-    ROUEN = CityCode("Rouen", "76000", "76540")
-    ORLEANS = CityCode("Orléans", "45000", "45234")
-    MONTREUIL = CityCode("Montreuil", "93100", "93048")
-    CAEN = CityCode("Caen", "14000", "14118")
-    SAINT_PAUL = CityCode("Saint-Paul", "97460", "97415")
-    ARGENTEUIL = CityCode("Argenteuil", "95100", "95018")
-    MULHOUSE = CityCode("Mulhouse", "68100", "68224")
-    NANCY = CityCode("Nancy", "54000", "54395")
-    TOURCOING = CityCode("Tourcoing", "59200", "59599")
-    ROUBAIX = CityCode("Roubaix", "59100", "59512")
-    NANTERRE = CityCode("Nanterre", "92000", "92050")
-    VITRY_SUR_SEINE = CityCode("Vitry-sur-Seine", "94400", "94081")
-    ASNIERES_SUR_SEINE = CityCode("Asnières-sur-Seine", "92600", "92004")
-    CRETEIL = CityCode("Créteil", "94000", "94028")
-    AVIGNON = CityCode("Avignon", "84000", "84007")
-    COLOMBES = CityCode("Colombes", "92700", "92025")
-    POITIERS = CityCode("Poitiers", "86000", "86194")
-    AUBERVILLIERS = CityCode("Aubervilliers", "93300", "93001")
-    AULNAY_SOUS_BOIS = CityCode("Aulnay-sous-Bois", "93600", "93005")
-    DUNKERQUE = CityCode("Dunkerque", "59140", "59183")
-    NOUMEA = CityCode("Nouméa", "98800", "98818")
-    SAINT_PIERRE = CityCode("Saint-Pierre", "97410", "97416")
-    VERSAILLES = CityCode("Versailles", "78000", "78646")
-    COURBEVOIE = CityCode("Courbevoie", "92400", "92026")
-    RUEIL_MALMAISON = CityCode("Rueil-Malmaison", "92500", "92063")
-    LE_TAMPON = CityCode("Le Tampon", "97430", "97422")
-    BEZIERS = CityCode("Béziers", "34500", "34032")
-    PAU = CityCode("Pau", "64000", "64445")
-    LA_ROCHELLE = CityCode("La Rochelle", "17000", "17300")
-    CHERBOURG_EN_COTENTIN = CityCode("Cherbourg-en-Cotentin", "50100", "50129")
-    MERIGNAC = CityCode("Mérignac", "33700", "33281")
-    CHAMPIGNY_SUR_MARNE = CityCode("Champigny-sur-Marne", "94500", "94017")
-    ANTIBES = CityCode("Antibes", "06160", "6004")
-    SAINT_MAUR_DES_FOSSES = CityCode("Saint-Maur-des-Fossés", "94100", "94068")
-    AJACCIO = CityCode("Ajaccio", "20000", "2A004")
-    FORT_DE_FRANCE = CityCode("Fort-de-France", "97200", "97209")
-    SAINT_NAZAIRE = CityCode("Saint-Nazaire", "44600", "44184")
-    CANNES = CityCode("Cannes", "06150", "6029")
-    NOISY_LE_GRAND = CityCode("Noisy-le-Grand", "93160", "93051")
-    DRANCY = CityCode("Drancy", "93700", "93029")
-    MAMOUDZOU = CityCode("Mamoudzou", "97600", "97611")
-    CERGY = CityCode("Cergy", "95000", "95127")
-    LEVALLOIS_PERRET = CityCode("Levallois-Perret", "92300", "92044")
-    ISSY_LES_MOULINEAUX = CityCode("Issy-les-Moulineaux", "92130", "92040")
-    CALAIs = CityCode("Calais", "62100", "62193")
-    PESSAC = CityCode("Pessac", "33600", "33318")
-    COLMAR = CityCode("Colmar", "68000", "68066")
-    EVRY_COURCOURONNES = CityCode("Évry-Courcouronnes", "91000", "91228")
-    VENISSIEUX = CityCode("Vénissieux", "69200", "69259")
-    IVRY_SUR_SEINE = CityCode("Ivry-sur-Seine", "94200", "94041")
-    VALENCE = CityCode("Valence", "26000", "26362")
-    CLICHY = CityCode("Clichy", "92110", "92024")
-    QUIMPER = CityCode("Quimper", "29000", "29232")
-    ANTONY = CityCode("Antony", "92160", "92002")
-    BOURGES = CityCode("Bourges", "18000", "18033")
-    LA_SEYNE_SUR_MER = CityCode("La Seyne-sur-Mer", "83500", "83126")
-    MONTAUBAN = CityCode("Montauban", "82000", "82121")
-    VILLENEUVE_D_ASCQ = CityCode("Villeneuve-d'Ascq", "59491", "59009")
-    CAYENNE = CityCode("Cayenne", "97300", "97302")
-    LE_BLANC_MESNIL = CityCode("Le Blanc-Mesnil", "93150", "93007")
-    TROYES = CityCode("Troyes", "10000", "10387")
+    MARSEILLE = CityCode("Marseille", "Bouches-du-Rhône", "13000", "13055")
+    NICE = CityCode("Nice", "Alpes-Maritimes", "06000", "6088")
+    TOULON = CityCode("Toulon", "Var", "83000", "83137")
+    REIMS = CityCode("Reims", "Marne", "51100", "51454")
+    SAINT_ETIENNE = CityCode("Saint-Étienne", "Loire", "42000", "42218")
+    LE_HAVRE = CityCode("Le Havre", "Seine-Maritime", "76600", "76351")
+    VILLEURBANNE = CityCode("Villeurbanne", "Rhône", "69100", "69266")
+    DIJON = CityCode("Dijon", "Côte-d'Or", "21000", "21231")
+    ANGERS = CityCode("Angers", "Maine-et-Loire", "49000", "49007")
+    GRENOBLE = CityCode("Grenoble", "Isère", "38000", "38185")
+    SAINT_DENIS = CityCode("Saint-Denis", "La Réunion", "97400", "97411")
+    NIMES = CityCode("Nîmes", "Gard", "30000", "30189")
+    CLERMONT_FERRAND = CityCode("Clermont-Ferrand", "Puy-de-Dôme", "63000", "63113")
+    LE_MANS = CityCode("Le Mans", "Sarthe", "72000", "72181")
+    BREST = CityCode("Brest", "Finistère", "29200", "29019")
+    TOURS = CityCode("Tours", "Indre-et-Loire",  "37000", "37261")
+    AMIENS = CityCode("Amiens", "Somme", "80000", "80021")
+    ANNECY = CityCode("Annecy",  "Haute-Savoie", "74000", "74010")
+    LIMOGES = CityCode("Limoges", "Haute-Vienne", "87000", "87085")
+    METZ = CityCode("Metz", "Moselle", "57000", "57463")
+    PERPIGNAN = CityCode("Perpignan", "Pyrénées-Orientales", "66000", "66136")
+    BOULOGNE_BILLANCOURT = CityCode("Boulogne-Billancourt", "Hauts-de-Seine", "92100", "92012")
+    BESANCON = CityCode("Besançon", "Doubs", "25000", "25056")
+    ROUEN = CityCode("Rouen", "Seine-Maritime", "76000", "76540")
+    ORLEANS = CityCode("Orléans", "Loiret", "45000", "45234")
+    MONTREUIL = CityCode("Montreuil", "Seine-Saint-Denis", "93100", "93048")
+    CAEN = CityCode("Caen", "Calvados", "14000", "14118")
+    SAINT_PAUL = CityCode("Saint-Paul", "La Réunion", "97460", "97415")
+    ARGENTEUIL = CityCode("Argenteuil", "Val-d'Oise", "95100", "95018")
+    MULHOUSE = CityCode("Mulhouse", "Haut-Rhin", "68100", "68224")
+    NANCY = CityCode("Nancy", "Meurthe-et-Moselle", "54000", "54395")
+    TOURCOING = CityCode("Tourcoing", "Nord", "59200", "59599")
+    ROUBAIX = CityCode("Roubaix", "Nord", "59100", "59512")
+    NANTERRE = CityCode("Nanterre", "Hauts-de-Seine", "92000", "92050")
+    VITRY_SUR_SEINE = CityCode("Vitry-sur-Seine", "Val-de-Marne", "94400", "94081")
+    ASNIERES_SUR_SEINE = CityCode("Asnières-sur-Seine", "Hauts-de-Seine", "92600", "92004")
+    CRETEIL = CityCode("Créteil", "Val-de-Marne", "94000", "94028")
+    AVIGNON = CityCode("Avignon", "Vaucluse", "84000", "84007")
+    COLOMBES = CityCode("Colombes", "Hauts-de-Seine", "92700", "92025")
+    POITIERS = CityCode("Poitiers", "Vienne", "86000", "86194")
+    AUBERVILLIERS = CityCode("Aubervilliers", "Seine-Saint-Denis", "93300", "93001")
+    AULNAY_SOUS_BOIS = CityCode("Aulnay-sous-Bois", "Seine-Saint-Denis", "93600", "93005")
+    DUNKERQUE = CityCode("Dunkerque", "Nord", "59140", "59183")
+    NOUMEA = CityCode("Nouméa", "Nouvelle-Calédonie", "98800", "98818")
+    SAINT_PIERRE = CityCode("Saint-Pierre", "La Réunion", "97410", "97416")
+    VERSAILLES = CityCode("Versailles", "Yvelines", "78000", "78646")
+    COURBEVOIE = CityCode("Courbevoie", "Hauts-de-Seine", "92400", "92026")
+    RUEIL_MALMAISON = CityCode("Rueil-Malmaison", "Hauts-de-Seine", "92500", "92063")
+    LE_TAMPON = CityCode("Le Tampon", "La Réunion", "97430", "97422")
+    BEZIERS = CityCode("Béziers", "Hérault", "34500", "34032")
+    PAU = CityCode("Pau", "Pyrénées-Atlantiques", "64000", "64445")
+    LA_ROCHELLE = CityCode("La Rochelle", "Charente-Maritime", "17000", "17300")
+    CHERBOURG_EN_COTENTIN = CityCode("Cherbourg-en-Cotentin", "Manche", "50100", "50129")
+    MERIGNAC = CityCode("Mérignac", "Gironde", "33700", "33281")
+    CHAMPIGNY_SUR_MARNE = CityCode("Champigny-sur-Marne", "Val-de-Marne", "94500", "94017")
+    ANTIBES = CityCode("Antibes", "Alpes-Maritimes", "06160", "6004")
+    SAINT_MAUR_DES_FOSSES = CityCode("Saint-Maur-des-Fossés", "Val-de-Marne", "94100", "94068")
+    AJACCIO = CityCode("Ajaccio", "Corse-du-Sud", "20000", "2A004")
+    FORT_DE_FRANCE = CityCode("Fort-de-France", "La Réunion", "97200", "97209")
+    SAINT_NAZAIRE = CityCode("Saint-Nazaire", "Loire-Atlantique", "44600", "44184")
+    CANNES = CityCode("Cannes", "Alpes-Maritimes", "06150", "6029")
+    NOISY_LE_GRAND = CityCode("Noisy-le-Grand", "Seine-Saint-Denis", "93160", "93051")
+    DRANCY = CityCode("Drancy", "Seine-Saint-Denis", "93700", "93029")
+    MAMOUDZOU = CityCode("Mamoudzou", "La Réunion", "97600", "97611")
+    CERGY = CityCode("Cergy", "Val-d'Oise", "95000", "95127")
+    LEVALLOIS_PERRET = CityCode("Levallois-Perret", "Hauts-de-Seine", "92300", "92044")
+    ISSY_LES_MOULINEAUX = CityCode("Issy-les-Moulineaux", "Hauts-de-Seine", "92130", "92040")
+    CALAIS = CityCode("Calais", "Pas-de-Calais", "62100", "62193")
+    PESSAC = CityCode("Pessac", "Gironde", "33600", "33318")
+    COLMAR = CityCode("Colmar", "Haut-Rhin", "68000", "68066")
+    EVRY_COURCOURONNES = CityCode("Évry-Courcouronnes", "Essonnes", "91000", "91228")
+    VENISSIEUX = CityCode("Vénissieux", "Rhône", "69200", "69259")
+    IVRY_SUR_SEINE = CityCode("Ivry-sur-Seine", "Val-de-Marne", "94200", "94041")
+    VALENCE = CityCode("Valence", "Drôme", "26000", "26362")
+    CLICHY = CityCode("Clichy", "Hauts-de-Seine", "92110", "92024")
+    QUIMPER = CityCode("Quimper", "Finistère", "29000", "29232")
+    ANTONY = CityCode("Antony", "Hauts-de-Seine", "92160", "92002")
+    BOURGES = CityCode("Bourges", "Cher", "18000", "18033")
+    LA_SEYNE_SUR_MER = CityCode("La Seyne-sur-Mer", "Var", "83500", "83126")
+    MONTAUBAN = CityCode("Montauban", "Tarn-et-Garonne", "82000", "82121")
+    VILLENEUVE_D_ASCQ = CityCode("Villeneuve-d'Ascq", "Nord", "59491", "59009")
+    CAYENNE = CityCode("Cayenne", "La Réunion", "97300", "97302")
+    LE_BLANC_MESNIL = CityCode("Le Blanc-Mesnil", "Seine-Saint-Denis", "93150", "93007")
+    TROYES = CityCode("Troyes", "Aube", "10000", "10387")
+
+    BASSE_GOULAINE = CityCode("Basse-Goulaine", "Loire-Atlantique", "44115", "44009")
+    BOUAYE = CityCode("Bouaye", "Loire-Atlantique", "44830", "44018")
+    BOUGUENAIS = CityCode("Bouguenais", "Loire-Atlantique", "44340", "44020")
+    BRAINS = CityCode("Brains", "Loire-Atlantique", "44830", "44024")
+    CARQUEFOU = CityCode("Carquefou", "Loire-Atlantique", "44470", "44026")
+    LA_CHAPELLE_SUR_ERDRE = CityCode("La Chapelle-sur-Erdre", "Loire-Atlantique", "44240", "44035")
+    COUERON = CityCode("Couëron", "Loire-Atlantique", "44220", "44047")
+    INDRE = CityCode("Indre", "Loire-Atlantique", "44610", "44074")
+    MAUVES_SUR_LOIRE = CityCode("Mauves-sur-Loire", "Loire-Atlantique", "44470", "44094")
+    LA_MONTAGNE = CityCode("La Montagne", "Loire-Atlantique", "44620", "44101")
+    ORVAULT = CityCode("Orvault", "Loire-Atlantique", "44700", "44114")
+    LE_PELLERIN = CityCode("Le Pellerin", "Loire-Atlantique", "44640", "44120")
+    REZE = CityCode("Rezé", "Loire-Atlantique", "44400", "44143")
+    SAINT_AIGNAN_GRANDLIEU = CityCode("Saint-Aignan-Grandlieu", "Loire-Atlantique", "44860", "44150")
+    SAINT_HERBLAIN = CityCode("Saint-Herblain", "Loire-Atlantique", "44800", "44162")
+    SAINT_JEAN_DE_BOISEAU = CityCode("Saint-Jean-de-Boiseau", "Loire-Atlantique", "44640", "44166")
+    SAINT_LEGER_LES_VIGNES = CityCode("Saint-Léger-les-Vignes", "Loire-Atlantique", "44710", "44171")
+    SAINT_SEBASTIEN_SUR_LOIRE = CityCode("Saint-Sébastien-sur-Loire", "Loire-Atlantique", "44230", "44190")
+    SAINTE_LUCE_SUR_LOIRE = CityCode("Sainte-Luce-sur-Loire", "Loire-Atlantique", "44980", "44172")
+    SAUTRON = CityCode("Sautron", "Loire-Atlantique", "44880", "44194")
+    LES_SORINIERES = CityCode("Les Sorinières", "Loire-Atlantique", "44840", "44198")
+    TROUARE_SUR_LOIRE = CityCode("Thouaré-sur-Loire", "Loire-Atlantique", "44470", "44204")
+    VERTOU = CityCode("Vertou", "Loire-Atlantique", "44120", "44215")
+
     # "Pantin": "93055",
     # "Villejuif": "94076",
     # "Chambéry": "73065",
@@ -298,7 +324,6 @@ class City(Enum):
     # "Albi": "81004",
     # "Les Abymes": "97101",
     # "Gennevilliers": "92036",
-    # "Saint-Herblain": "44162",
     # "Grasse": "6069",
     # "Bondy": "93010",
     # "Les Sables-d'Olonne": "85194",
@@ -337,7 +362,6 @@ class City(Enum):
     # "Salon-de-Provence": "13103",
     # "Puteaux": "92062",
     # "Caluire-et-Cuire": "69034",
-    # "Rezé": "44143",
     # "Mantes-la-Jolie": "78361",
     # "Valenciennes": "59606",
     # "Anglet": "64024",

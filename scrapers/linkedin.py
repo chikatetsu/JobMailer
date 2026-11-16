@@ -7,6 +7,7 @@ from urllib.parse import urlparse, urlunparse, unquote
 import regex as re
 from bs4 import BeautifulSoup
 from bs4.element import Tag
+from unidecode import unidecode
 
 from inputs.scraper_input import ScraperInput
 from models.city import City
@@ -98,6 +99,12 @@ class LinkedIn(BaseScraper, SessionScraper):
         job_id = self.get_id(job_card)
         if job_id == "":
             return None
+
+        metadata_card = job_card.find("div", class_="base-search-card__metadata")
+        address = self.get_address(metadata_card)
+        if unidecode(str(self.city)).upper() not in unidecode(address).upper() or unidecode(self.city.value.departement).upper() not in unidecode(address).upper():
+            return None
+
         if job_id in self.seen_jobs:
             return JobReference(job_id)
 
@@ -106,10 +113,6 @@ class LinkedIn(BaseScraper, SessionScraper):
 
         company_tag = job_card.find("h4", class_="base-search-card__subtitle")
         company_a_tag = company_tag.find("a") if company_tag else None
-
-        metadata_card = job_card.find("div", class_="base-search-card__metadata")
-        address = self.get_address(metadata_card)
-        # TODO: CHECK IF ADDRESS IS IN CITY
 
         try:
             response = self.session.get(job_url, timeout=5)
