@@ -264,18 +264,19 @@ def edit_company(company_id):
             abort(404, "Couln't parse dev_hiring")
         company.dev_hiring = dev_hiring
 
-    if company_name is not None and company.name != company_name.upper():
-        company.name = company_name.upper()
+    if company_name is not None and company.name.upper() != company_name.upper():
         jobs = job_repo.get_all_jobs()
         for job in jobs:
-            if job.company_id is None and job.company.upper() == company_name.upper():
-                job.company_id = company.id
-                job.company_url = company.url
-                job.company_logo = company.logo
-                job.address = company.address
-                job.lon = company.lon
-                job.lat = company.lat
-                job_repo.update_job(job.id, job)
+            if job.company_id is None:
+                company_found = company_repo.get_company_by_name(job.company, job.city)
+                if company_found is not None:
+                    job.company_id = company_found.id
+                    job.company_url = company_found.url
+                    job.company_logo = company_found.logo
+                    job.address = company_found.address
+                    job.lon = company_found.lon
+                    job.lat = company_found.lat
+                    job_repo.update_job(job.id, job)
         job_repo.commit()
 
     success = company_repo.update_company(company_id, company)

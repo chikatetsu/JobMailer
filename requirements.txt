@@ -12,3 +12,5 @@ pyproj
 geopy
 urllib3
 gunicorn
+
+unidecode

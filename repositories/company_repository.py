@@ -1,5 +1,6 @@
 import sqlite3
 from pathlib import Path
+from unidecode import unidecode
 
 from models.city import City
 from models.company import Company
@@ -81,15 +82,15 @@ class CompanyRepository:
 
     def get_company_by_name(self, name: str, city: City) -> Company | None:
         company_name = (
-            name.upper()
+            unidecode(name).upper()
                 .replace(str(city), "")
                 .replace("FRANCE", "")
                 .replace(" SARL", "")
                 .replace(" SASU", "")
                 .replace(" SAS", "")
                 .replace(" S.A.S.", "")
-                .replace("É", "")
                 .replace("®", "")
+                .replace(".", "")
                 .strip()
         )
         cursor = self.conn.execute("SELECT * FROM companies WHERE name = ? AND city = ?", (company_name, str(city)))
