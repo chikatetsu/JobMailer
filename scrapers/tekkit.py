@@ -74,25 +74,25 @@ class Tekkit(BaseScraper, SessionScraper):
         if not self.location_data:
             return JobResponse()
         jobs = []
-        try:
-            for page in range(1, sys.maxsize):
-                url = self._build_url(page)
-                self.log.info(f"scraping page {page}...")
-                response = self.session.get(url)
-                soup = BeautifulSoup(response.text, "html.parser")
+        # try:
+        for page in range(1, sys.maxsize):
+            url = self._build_url(page)
+            self.log.info(f"scraping page {page}...")
+            response = self.session.get(url)
+            soup = BeautifulSoup(response.text, "html.parser")
 
-                job_cards = soup.select("div:has(h3 a[href^='/offre/'])")
-                for card in job_cards:
-                    job = self.process_job(card)
-                    if job is not None:
-                        jobs.append(job)
+            job_cards = soup.select("div:has(h3 a[href^='/offre/'])")
+            for card in job_cards:
+                job = self.process_job(card)
+                if job is not None:
+                    jobs.append(job)
 
-                next_button = soup.find("button", class_=["button-outline", "button-full-width"])
-                if next_button and next_button.get_text(strip=True) == "Page précédente":
-                    self.log.info("finished scrapping")
-                    break
-        except Exception as e:
-            self.log.error(e)
+            next_button = soup.find("button", class_=["button-outline", "button-full-width"])
+            if next_button and next_button.get_text(strip=True) == "Page précédente":
+                self.log.info("finished scrapping")
+                break
+        # except Exception as e:
+        #     self.log.error(e)
         return JobResponse(jobs)
 
     def process_job(self, job_card: Tag) -> Job | JobReference | None:

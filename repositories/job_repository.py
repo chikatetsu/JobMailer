@@ -275,6 +275,7 @@ class JobRepository:
             })
             return True
         except Exception as e:
+            self.conn.rollback()
             self.log.error(e)
             return False
 

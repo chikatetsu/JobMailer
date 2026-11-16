@@ -50,7 +50,7 @@ class WelcomeToTheJungle(BaseScraper, SessionScraper):
                     self.log.error(f"No jobs found on page {page}")
                     break
                 hits = data["queries"][1]["state"]["data"]["results"][0]["hits"]
-    
+
                 jobs = []
                 for job_json in hits:
                     job = self.process_job(job_json)
@@ -117,7 +117,8 @@ class WelcomeToTheJungle(BaseScraper, SessionScraper):
         office_raw = job_json.get("offices", [{}])[0]
         if not office_raw:
             return ""
-        city = office_raw.get("city", "").title()
+        city = office_raw.get("city", None).title()
+        city = city.title() if city else ""
         return city
 
     def get_posted_date(self, job_json: dict) -> datetime | None:

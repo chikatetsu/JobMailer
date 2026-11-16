@@ -246,6 +246,7 @@ def edit_company(company_id):
                 job.lon = company.lon
                 job.lat = company.lat
                 job_repo.update_job(job.id, job)
+        job_repo.commit()
 
     if company_siren is not None and company.siren != company_siren:
         company.siren = company_siren
@@ -275,8 +276,10 @@ def edit_company(company_id):
                 job.lon = company.lon
                 job.lat = company.lat
                 job_repo.update_job(job.id, job)
+        job_repo.commit()
 
     success = company_repo.update_company(company_id, company)
+    company_repo.commit()
     if not success:
         abort(400, "Couldn't update the database")
 

@@ -58,19 +58,12 @@ class LinkedIn(BaseScraper, SessionScraper):
 
             params = {k: v for k, v in params.items() if v is not None}
             try:
-                response = self.session.get(
-                    f"{self.base_url}/jobs-guest/jobs/api/seeMoreJobPostings/search?",
-                    params=params,
-                    timeout=10,
-                )
+                response = self.session.get(f"{self.base_url}/jobs-guest/jobs/api/seeMoreJobPostings/search?", params=params, timeout=10)
                 if response.status_code not in range(200, 400):
                     if response.status_code == 429:
-                        err = (
-                            f"429 Response - Blocked by LinkedIn for too many requests"
-                        )
+                        err = "429 Response - Blocked by LinkedIn for too many requests"
                     else:
-                        err = f"LinkedIn response status code {response.status_code}"
-                        err += f" - {response.text}"
+                        err = f"LinkedIn response status code {response.status_code} - {response.text}"
                     self.log.error(err)
                     return JobResponse(job_list)
             except Exception as e:
@@ -116,6 +109,7 @@ class LinkedIn(BaseScraper, SessionScraper):
 
         metadata_card = job_card.find("div", class_="base-search-card__metadata")
         address = self.get_address(metadata_card)
+        # TODO: CHECK IF ADDRESS IS IN CITY
 
         try:
             response = self.session.get(job_url, timeout=5)
