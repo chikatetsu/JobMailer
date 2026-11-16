@@ -85,9 +85,10 @@ def format_email_body(subject: str, new_jobs: JobList, already_saved_jobs: JobLi
         growth_color = "#00ff00"
     else:
         growth_color = "#ffffff"
+    filtered_deleted_jobs = JobList([job for job in deleted_jobs if job.title != "Candidature spontanée"])
     title_new_jobs = f"<h3 style=\"color:#00aa00;\">Nouvelles offres ({len(new_jobs)})</h3>{modals(new_jobs[:12])}" if len(new_jobs) > 0 else ""
     title_interesting_jobs = f"<h3 style=\"color:#aaaa00\">Offres intéressantes</h3>{modals(already_saved_jobs[:12])}" if len(already_saved_jobs) > 0 else ""
-    title_deleted_jobs = f"<h3 style=\"color:#aa0000\">Offres expirées ({len(deleted_jobs)})</h3>{modals(deleted_jobs[:12])}" if len(deleted_jobs) > 0 else ""
+    title_deleted_jobs = f"<h3 style=\"color:#aa0000\">Offres expirées ({len(deleted_jobs)})</h3>{modals(filtered_deleted_jobs[:12])}" if len(deleted_jobs) > 0 else ""
     return f"""
         <html><body>
         <h2>{subject}</h2>
