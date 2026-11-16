@@ -74,25 +74,25 @@ class Tekkit(BaseScraper, SessionScraper):
         if not self.location_data:
             return JobResponse()
         jobs = []
-        # try:
         for page in range(1, sys.maxsize):
-            url = self._build_url(page)
-            self.log.info(f"scraping page {page}...")
-            response = self.session.get(url)
-            soup = BeautifulSoup(response.text, "html.parser")
+            try:
+                url = self._build_url(page)
+                self.log.info(f"scraping page {page}...")
+                response = self.session.get(url)
+                soup = BeautifulSoup(response.text, "html.parser")
 
-            job_cards = soup.select("div:has(h3 a[href^='/offre/'])")
-            for card in job_cards:
-                job = self.process_job(card)
-                if job is not None:
-                    jobs.append(job)
+                job_cards = soup.select("div:has(h3 a[href^='/offre/'])")
+                for card in job_cards:
+                    job = self.process_job(card)
+                    if job is not None:
+                        jobs.append(job)
 
-            next_button = soup.find("button", class_=["button-outline", "button-full-width"])
-            if next_button and next_button.get_text(strip=True) == "Page précédente":
-                self.log.info("finished scrapping")
-                break
-        # except Exception as e:
-        #     self.log.error(e)
+                next_button = soup.find("button", class_=["button-outline", "button-full-width"])
+                if next_button and next_button.get_text(strip=True) == "Page précédente":
+                    self.log.info("finished scrapping")
+                    break
+            except Exception as e:
+                self.log.error(e)
         return JobResponse(jobs)
 
     def process_job(self, job_card: Tag) -> Job | JobReference | None:
@@ -180,13 +180,18 @@ class Tekkit(BaseScraper, SessionScraper):
         date_raw = job_card.find("div", class_=["hidden", "mt-1", "text-base", "md:block", "text-gray40"])
         if not date_raw:
             return datetime.now()
+        date_raw = date_raw.get_text(strip=True)
 
-        if date_raw.startwith("Le "):
+        if date_raw.startswith("Le "):
             day, month, year = date_raw.replace("Le ", "").split("/")
             return datetime(int(year), int(month), int(day))
-        elif date_raw.startwith("Il y a "):
-            day = int(date_raw.replace("Il y a ", "").replace(" jours", "").replace(" jour", ""))
-            return datetime.now() - timedelta(days=day)
+        elif date_raw.startswith("Il y a "):
+            if "jour" in date_raw:
+                day = int(date_raw.replace("Il y a ", "").replace(" jours", "").replace(" jour", ""))
+                return datetime.now() - timedelta(days=day)
+            elif "heure" in date_raw:
+                hour = int(date_raw.replace("Il y a ", "").replace(" heures", "").replace(" heure", ""))
+                return datetime.now() - timedelta(hours=hour)
 
         self.log.debug(date_raw)
         # TODO
